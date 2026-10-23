@@ -3,7 +3,7 @@ from typing import Final, Mapping
 
 # ── Output / API ────────────────────────────────────────────────────────────
 OUTPUT_PATH: Final[str] = "assets/stats.svg"
-TOKEN_ENV: Final[str] = "GH_TOKEN"
+STATS_TOKEN: Final[str] = "STATS_TOKEN"
 GRAPHQL_URL: Final[str] = "https://api.github.com/graphql"
 REPOS_PAGE_SIZE: Final[int] = 50      # repositories per GraphQL page
 LANGS_PER_REPO: Final[int] = 20       # language edges requested per repository

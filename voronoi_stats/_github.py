@@ -7,7 +7,7 @@ import urllib.request
 from datetime import date, datetime, time, timedelta, timezone
 from typing import Final, NamedTuple, NoReturn, cast
 
-from ._constants import GRAPHQL_URL, LANGS_PER_REPO, REPOS_PAGE_SIZE, TOKEN_ENV, WEEKS
+from ._constants import GRAPHQL_URL, LANGS_PER_REPO, REPOS_PAGE_SIZE, STATS_TOKEN, WEEKS
 
 JsonObject = dict[str, object]
 
@@ -127,10 +127,10 @@ def _iso(moment: datetime) -> str:
 # ── Talking to the API ──────────────────────────────────────────────────────
 def read_token() -> str:
     """Read the token from the environment variable named in constants.py."""
-    token: str = os.environ.get(TOKEN_ENV, "").strip()
+    token: str = os.environ.get(STATS_TOKEN, "").strip()
     if not token:
         raise GitHubApiError(
-            f"Environment variable {TOKEN_ENV} is empty or missing.")
+            f"Environment variable {STATS_TOKEN} is empty or missing.")
     return token
 
 
@@ -167,7 +167,7 @@ def _run_query(query: str, variables: JsonObject, token: str) -> JsonObject:
     except urllib.error.HTTPError as error:
         if error.code == 401:
             raise GitHubApiError(
-                f"GitHub rejected the token. Check {TOKEN_ENV}.") from error
+                f"GitHub rejected the token. Check {STATS_TOKEN}.") from error
         if error.code in (403, 429):
             raise GitHubApiError(
                 f"GitHub refused the request (HTTP {error.code}): "
