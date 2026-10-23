@@ -1,12 +1,3 @@
-"""All tunable values for voronoi-stats. Every other file reads from here.
-
-Output must be deterministic: same data -> same SVG, byte for byte.
-Never use unseeded random, Python's hash(), or dates inside the SVG.
-
-Every constant is annotated with ``Final`` and an explicit type so the module
-passes Pylance/Pyright strict mode. Requires Python 3.9+.
-"""
-
 from types import MappingProxyType
 from typing import Final, Mapping
 
