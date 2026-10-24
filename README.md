@@ -120,7 +120,7 @@ jobs:
 
       - name: Generate svg card
         env:
-          GH_TOKEN: ${{ secrets.CONTRIB_TOKEN }}
+          STATS_TOKEN: ${{ secrets.STATS_TOKEN }}
         run: python voronoi-stats/main.py "$USERNAME" --theme "$THEME"
 
       - name: Save to repository if changed
@@ -176,7 +176,7 @@ With the token copied:
 
 1. Go to your profile repository on GitHub and open **Settings → Secrets and variables → Actions**.
 2. Click **New repository secret**.
-3. In **Name**, type exactly `CONTRIB_TOKEN`.
+3. In **Name**, type exactly `STATS_TOKEN`.
 4. In **Secret**, paste the token you just created.
 5. Click **Add secret**.
 
@@ -268,7 +268,7 @@ Here is what each group of constants is for:
 > Be careful with the **Card layout**, **Geometry** and **Output and GitHub API** groups. Changing them can misalign the card or break the data download. If something goes wrong, restore the original values. Also remember that:
 > - if you change `ACTIVE_DAYS`, update the legend text in `LABELS` (`legend_active`), which says 90 days;
 > - if you change `OUTPUT_PATH`, update the `git status` and `git add` paths in the workflow;
-> - if you change `TOKEN_ENV`, update the `GH_TOKEN` name in the workflow.
+> - if you change `STATS_TOKEN`, update the `STATS_TOKEN` name in the workflow.
 
 <p align="right"><a href="#table-of-contents">⬆ back to top</a></p>
 
