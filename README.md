@@ -357,7 +357,7 @@ Available themes: [`mint`](#mint) · [`chocomint`](#choco-mint) · [`lavender`](
 <p align="center"><img src="assets/stats_mint.svg" alt="Code Territory card, mint theme" width="800"></p>
 
 #### Choco Mint
-`--theme mint`
+`--theme chocomint`
 <p align="center"><img src="assets/stats_chocomint.svg" alt="Code Territory card, choco mint theme" width="800"></p>
 
 #### Lavender
