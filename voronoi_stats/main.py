@@ -35,7 +35,7 @@ def update_voronoi_stats(username: str, theme_name: str) -> None:
 
 def main() -> int:
     parser: argparse.ArgumentParser = argparse.ArgumentParser(
-        description="Generate the Code Territory SVG for a GitHub profile."
+        description="Generate the voronoi-stats SVG for a GitHub profile."
     )
     parser.add_argument("username", help="GitHub username")
     parser.add_argument("--theme", default="neon",

@@ -3,7 +3,7 @@ from typing import Final, Mapping
 
 # ── Output / API ────────────────────────────────────────────────────────────
 OUTPUT_PATH: Final[str] = "assets/stats.svg"
-STATS_TOKEN: Final[str] = "STATS_TOKEN"
+GH_TOKEN: Final[str] = "GH_TOKEN"
 GRAPHQL_URL: Final[str] = "https://api.github.com/graphql"
 REPOS_PAGE_SIZE: Final[int] = 50      # repositories per GraphQL page
 LANGS_PER_REPO: Final[int] = 20       # language edges requested per repository
@@ -14,8 +14,6 @@ MAX_LANGUAGES: Final[int] = 5
 OTHER_LABEL: Final[str] = "Other"
 # minimum territory area (2.5%) so small languages stay visible
 MIN_AREA_SHARE: Final[float] = 0.025
-# push within this window -> pulsing cyan dot
-ACTIVE_DAYS: Final[int] = 90
 WEEKS: Final[int] = 52                # weekly points per activity chart
 ACTIVITY_KEYS: Final[tuple[str, ...]] = (
     "commits", "pull_requests", "issues", "reviews")
@@ -42,13 +40,23 @@ PLOT_W: Final[int] = 550
 PLOT_H: Final[int] = 300              # was 230 in the prototype
 PLOT_RADIUS: Final[int] = 10
 
-LEGEND_GAP: Final[int] = 16           # space between plot and legend
-# fixed legend height; render.py must fit inside it
-LEGEND_H: Final[int] = 110
+# Legend: one row with the languages (and the opacity scale) + one row per
+# explanation item (Area, Cell, Opacity). Every row has the same height.
+LEGEND_GAP: Final[int] = 20           # space between plot and legend
+LEGEND_ROWS: Final[int] = 4           # language row + 3 explanation items
+LEGEND_ROW_H: Final[int] = 28         # height of each legend row
+# extra space above the first row and below the last
+LEGEND_PAD_Y: Final[int] = 4
+LEGEND_H: Final[int] = LEGEND_ROWS * LEGEND_ROW_H + 2 * LEGEND_PAD_Y  # 120
+LEGEND_SWATCH: Final[int] = 16        # side of the language color squares
+LEGEND_SWATCH_RADIUS: Final[float] = 3.0
+# squares of the oldest -> newest opacity scale
+LEGEND_SCALE_STEPS: Final[int] = 5
+LEGEND_SCALE_GAP: Final[int] = 3      # space between the scale squares
 
 CARD_PAD_BOTTOM: Final[int] = PAD
 CARD_H: Final[int] = PLOT_Y + PLOT_H + \
-    LEGEND_GAP + LEGEND_H + CARD_PAD_BOTTOM  # 502
+    LEGEND_GAP + LEGEND_H + CARD_PAD_BOTTOM  # 516
 
 ACTIVITY_X: Final[int] = 598          # left edge of the activity column
 # width of the activity column (ends at x=858)
@@ -76,10 +84,8 @@ TERRITORY_OUTLINE_W: Final[float] = 3.4
 TERRITORY_LINE_W: Final[float] = 1.2      # thin colored stroke on top
 TERRITORY_LINE_OPACITY: Final[float] = 0.9
 PLOT_BORDER_OPACITY: Final[float] = 0.28
-DOT_ACTIVE_R: Final[float] = 2.6
-DOT_DORMANT_R: Final[float] = 1.5
-DOT_DORMANT_OPACITY: Final[float] = 0.4
 SPARK_STROKE_W: Final[float] = 1.6
+# pulsing dot at the end of each line chart
 SPARK_END_R: Final[float] = 2.6
 DIVIDER_OPACITY: Final[float] = 0.08
 GLOW_OPACITY: Final[float] = 0.16
@@ -87,7 +93,6 @@ GLOW_RX: Final[int] = 380
 GLOW_RY: Final[int] = 200
 # small uppercase labels (COMMITS, REPOS...)
 LABEL_TEXT_OPACITY: Final[float] = 0.55
-LEGEND_NOTE_OPACITY: Final[float] = 0.5
 
 # Language colors: hue spacing across the theme's hue range.
 # "Other" is desaturated vs named languages
@@ -97,8 +102,8 @@ OTHER_SATURATION_FACTOR: Final[float] = 0.6
 FONT_FAMILY: Final[str] = "Arial,Helvetica,sans-serif"
 FONT_TITLE: Final[float] = 18.0
 FONT_HEADER: Final[float] = 12.0
-FONT_LEGEND: Final[float] = 11.5
-FONT_LEGEND_NOTE: Final[float] = 10.0
+# legend titles, explanations and language names
+FONT_LEGEND: Final[float] = 13.0
 FONT_METRIC_LABEL: Final[float] = 10.5
 FONT_METRIC_VALUE: Final[float] = 28.0
 FONT_FOOTER_LABEL: Final[float] = 10.0
@@ -110,23 +115,26 @@ ANIM_CELL_DURATION: Final[float] = 0.9
 ANIM_CELL_STEP: Final[float] = 0.04       # stagger between cells
 ANIM_CELL_START: Final[float] = 0.15
 ANIM_CELL_START_SCALE: Final[float] = 0.55
-# outlines and dots fade in after the cells
+# territory outlines fade in after the cells
 ANIM_TERRITORY_DELAY: Final[float] = 1.6
 ANIM_TERRITORY_DURATION: Final[float] = 1.0
 ANIM_SPARK_DELAY: Final[float] = 0.5
 ANIM_SPARK_DURATION: Final[float] = 1.8
 ANIM_NUM_DELAY: Final[float] = 0.4
 ANIM_NUM_DURATION: Final[float] = 0.8
+# the dots at the end of the line charts pulse
 ANIM_PULSE_DELAY: Final[float] = 2.4
 ANIM_PULSE_DURATION: Final[float] = 6.0
 ANIM_PULSE_MIN_OPACITY: Final[float] = 0.5
 
 # ── Text (change here to translate) ─────────────────────────────────────────
+# Each legend item is drawn as "<title> <text>": the title (with its colon) uses
+# the theme's legend_title color, the text uses legend_text. Keep every text
+# short enough to fit in one line of the card (about 100 characters).
 LABELS: Final[Mapping[str, str]] = MappingProxyType(
     {
-        "title": "CODE TERRITORY",
+        "title": "GITHUB STATS",
         "header_activity": "ACTIVITY · 12 MONTHS",
-        "header_hint": "1 cell = 1 repository · area = code",
         "commits": "COMMITS",
         "pull_requests": "PULL REQUESTS",
         "issues": "ISSUES",
@@ -134,22 +142,21 @@ LABELS: Final[Mapping[str, str]] = MappingProxyType(
         "repos": "REPOS",
         "stars": "STARS",
         "forks": "FORKS",
-        # Legend (7 items)
-        "legend_languages": "Language color and real share of code",
-        "legend_territory": "Territory = language",
-        "legend_area": "Area = bytes of code (2.5% minimum so small languages stay visible)",
-        "legend_cell": "Cell = repository in that language; multi-language repos appear in each territory",
-        "legend_opacity": "Opacity = recency of last push",
+        # Legend: opacity scale, drawn at the end of the language row
         "legend_opacity_old": "oldest",
         "legend_opacity_new": "newest",
-        "legend_active": "Pulsing cyan dot = push in the last 90 days",
-        "legend_dormant": "White dot = no recent activity",
-        "legend_activity": "Right: weekly activity; cyan dot = current week",
+        # Legend: explanation items
+        "legend_region_title": "Region:",
+        "legend_region_text": "each one represents a language",
+        "legend_cell_title": "Cell:",
+        "legend_cell_text": "each one represents a repository associated with a programming language.",
+        "legend_opacity_title": "Opacity:",
+        "legend_opacity_text": "proportional to how recently the repository was last pushed to (compared to the others)",
         # Accessibility
-        "svg_title": "Code Territory",
+        "svg_title": "GitHub Stats",
         "svg_desc": (
             "Weighted Voronoi map of {user}'s repositories: each territory is a language "
-            "and each cell is a repository, with area proportional to bytes of code. "
+            "and each cell is a repository, with area proportional to the amount of code. "
             "Opacity shows how recent the last push was. On the right, weekly activity "
             "for the last 12 months."
         ),

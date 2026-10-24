@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="516" viewBox="0 0 880 516" font-family="Arial,Helvetica,sans-serif" role="img" aria-labelledby="svg-title svg-desc">
+<title id="svg-title">GitHub Stats</title>
+<desc id="svg-desc">Weighted Voronoi map of JonatasCortes's repositories: each territory is a language and each cell is a repository, with area proportional to the amount of code. Opacity shows how recent the last push was. On the right, weekly activity for the last 12 months.</desc>
+<style>.cell{animation:cell-in 0.9s ease-out both}.terr{animation:fade-in 1s ease-out 1.6s both}.spark{stroke-dasharray:1;stroke-dashoffset:0;animation:draw 1.8s ease-out 0.5s both}.num{animation:fade-in 0.8s ease-out 0.4s both}.endpt{animation:fade-in 0.8s ease-out 2.3s both}.pulse{animation:pulse 6s ease-in-out 2.4s infinite}@keyframes cell-in{from{opacity:0;transform:scale(0.55)}to{opacity:1;transform:scale(1)}}@keyframes fade-in{from{opacity:0}to{opacity:1}}@keyframes draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}@media (prefers-reduced-motion:reduce){.cell,.terr,.spark,.num,.endpt,.pulse{animation:none}}</style>
+<defs><linearGradient id="border" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#CB4B16"/><stop offset="1" stop-color="#002B36"/></linearGradient><radialGradient id="glow"><stop offset="0" stop-color="#B58900" stop-opacity="0.16"/><stop offset="1" stop-color="#B58900" stop-opacity="0"/></radialGradient><clipPath id="card-clip"><rect x="1" y="1" width="878" height="514" rx="15"/></clipPath><clipPath id="plot-clip"><rect x="22" y="54" width="550" height="300" rx="10"/></clipPath></defs>
+<rect x="1" y="1" width="878" height="514" rx="15" fill="#002B36" stroke="url(#border)" stroke-width="2"/>
+<ellipse cx="440" cy="258" rx="380" ry="200" fill="url(#glow)" clip-path="url(#card-clip)"/>
+<rect x="22" y="22" width="4" height="22" rx="2" fill="#B58900"/>
+<text x="37" y="39" font-size="18" font-weight="700" letter-spacing="1" fill="#B58900">GITHUB STATS</text>
+<text x="598" y="39" font-size="12" letter-spacing="1" fill="#2AA198">ACTIVITY · 12 MONTHS</text>
+<rect x="22" y="54" width="550" height="300" rx="10" fill="#073642"/>
+<g clip-path="url(#plot-clip)">
+<polygon class="cell" points="203.2,223.4 199.1,215.2 262.7,54 398.3,54 443.6,101.2 459.4,144.3 362.1,305.6" fill="#bd9828" fill-opacity="0.54" stroke="#002B36" stroke-width="1.4" stroke-linejoin="round" style="transform-origin:331px 164.8px;animation-delay:0.15s"/>
+<polygon class="cell" points="362.1,305.6 459.4,144.3 572,164 572,354 372.4,354" fill="#bd9828" fill-opacity="0.53" stroke="#002B36" stroke-width="1.4" stroke-linejoin="round" style="transform-origin:482px 263.2px;animation-delay:0.19s"/>
+<polygon class="cell" points="62.8,278.7 59.9,214 163.9,199.5 199.1,215.2 203.2,223.4 164.3,354 91.9,354" fill="#bd9828" fill-opacity="0.55" stroke="#002B36" stroke-width="1.4" stroke-linejoin="round" style="transform-origin:128.3px 272.7px;animation-delay:0.23s"/>
+<polygon class="cell" points="203.2,223.4 362.1,305.6 372.4,354 164.3,354" fill="#bd9828" fill-opacity="0.55" stroke="#002B36" stroke-width="1.4" stroke-linejoin="round" style="transform-origin:259.9px 307.2px;animation-delay:0.27s"/>
+<polygon class="cell" points="163.9,199.5 125.6,54 262.7,54 199.1,215.2" fill="#bd9828" fill-opacity="0.15" stroke="#002B36" stroke-width="1.4" stroke-linejoin="round" style="transform-origin:190.2px 116px;animation-delay:0.31s"/>
+<polygon class="cell" points="459.4,144.3 443.6,101.2 460.5,54 572,54 572,164" fill="#bd9828" fill-opacity="0.36" stroke="#002B36" stroke-width="1.4" stroke-linejoin="round" style="transform-origin:513.9px 104px;animation-delay:0.35s"/>
+<polygon class="cell" points="163.9,199.5 59.9,214 57.2,154.7 91.5,54 125.6,54" fill="#bd9828" fill-opacity="0.5" stroke="#002B36" stroke-width="1.4" stroke-linejoin="round" style="transform-origin:106.2px 143.1px;animation-delay:0.39s"/>
+<polygon class="cell" points="443.6,101.2 398.3,54 460.5,54" fill="#bd9828" fill-opacity="0.4" stroke="#002B36" stroke-width="1.4" stroke-linejoin="round" style="transform-origin:434.1px 69.7px;animation-delay:0.43s"/>
+<polygon class="cell" points="57.2,154.7 22,154.7 22,54 91.5,54" fill="#77bd28" fill-opacity="0.31" stroke="#002B36" stroke-width="1.4" stroke-linejoin="round" style="transform-origin:49.1px 98.9px;animation-delay:0.47s"/>
+<polygon class="cell" points="22,278.7 22,154.7 57.2,154.7 62.8,278.7" fill="#28bd45" fill-opacity="0.51" stroke="#002B36" stroke-width="1.4" stroke-linejoin="round" style="transform-origin:41px 218.3px;animation-delay:0.51s"/>
+<polygon class="cell" points="22,278.7 62.8,278.7 91.9,354 22,354" fill="#28bdb1" fill-opacity="0.53" stroke="#002B36" stroke-width="1.4" stroke-linejoin="round" style="transform-origin:50.3px 319.7px;animation-delay:0.55s"/>
+<g class="terr">
+<polygon points="62.8,278.7 57.2,154.7 91.5,54 572,54 572,354 91.9,354" fill="none" stroke="#002B36" stroke-width="3.4" stroke-linejoin="round"/>
+<polygon points="62.8,278.7 57.2,154.7 91.5,54 572,54 572,354 91.9,354" fill="none" stroke="#bd9828" stroke-width="1.2" stroke-opacity="0.9" stroke-linejoin="round"/>
+<polygon points="57.2,154.7 22,154.7 22,54 91.5,54" fill="none" stroke="#002B36" stroke-width="3.4" stroke-linejoin="round"/>
+<polygon points="57.2,154.7 22,154.7 22,54 91.5,54" fill="none" stroke="#77bd28" stroke-width="1.2" stroke-opacity="0.9" stroke-linejoin="round"/>
+<polygon points="22,278.7 22,154.7 57.2,154.7 62.8,278.7" fill="none" stroke="#002B36" stroke-width="3.4" stroke-linejoin="round"/>
+<polygon points="22,278.7 22,154.7 57.2,154.7 62.8,278.7" fill="none" stroke="#28bd45" stroke-width="1.2" stroke-opacity="0.9" stroke-linejoin="round"/>
+<polygon points="22,278.7 62.8,278.7 91.9,354 22,354" fill="none" stroke="#002B36" stroke-width="3.4" stroke-linejoin="round"/>
+<polygon points="22,278.7 62.8,278.7 91.9,354 22,354" fill="none" stroke="#28bdb1" stroke-width="1.2" stroke-opacity="0.9" stroke-linejoin="round"/>
+</g>
+</g>
+<rect x="22" y="54" width="550" height="300" rx="10" fill="none" stroke="#B58900" stroke-opacity="0.28"/>
+<text x="598" y="69" font-size="10.5" letter-spacing="1" fill="#839496" fill-opacity="0.55">COMMITS</text>
+<text class="num" x="598" y="101.5" font-size="28" font-weight="700" fill="#839496">649</text>
+<path class="spark" d="M724 98.4 L726.6 95.8 L729.3 97.4 L731.9 97.9 L734.5 77.8 L737.1 93.3 L739.8 101.5 L742.4 101.5 L745 101.5 L747.6 101.5 L750.3 101.5 L752.9 101.5 L755.5 101.5 L758.2 101.5 L760.8 97.9 L763.4 97.9 L766 101.5 L768.7 101.5 L771.3 101.5 L773.9 101.5 L776.5 101.5 L779.2 101.5 L781.8 97.9 L784.4 98.4 L787.1 93.3 L789.7 99.4 L792.3 98.4 L794.9 73.7 L797.6 79.9 L800.2 75.3 L802.8 94.8 L805.5 90.2 L808.1 81.4 L810.7 88.6 L813.3 66 L816 81.4 L818.6 101.5 L821.2 98.9 L823.8 101.5 L826.5 100.5 L829.1 96.9 L831.7 101.5 L834.4 100.5 L837 98.4 L839.6 100.5 L842.2 97.4 L844.9 101.5 L847.5 90.2 L850.1 92.2 L852.7 97.4 L855.4 88.6 L858 80.4" pathLength="1" fill="none" stroke="#B58900" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<g class="endpt"><circle class="pulse" cx="858" cy="80.4" r="2.6" fill="#2AA198"/></g>
+<line x1="598" y1="113.5" x2="858" y2="113.5" stroke="#839496" stroke-opacity="0.08"/>
+<text x="598" y="128.5" font-size="10.5" letter-spacing="1" fill="#839496" fill-opacity="0.55">PULL REQUESTS</text>
+<text class="num" x="598" y="161" font-size="28" font-weight="700" fill="#839496">87</text>
+<path class="spark" d="M724 161 L726.6 161 L729.3 161 L731.9 155.9 L734.5 133.1 L737.1 155.9 L739.8 145.8 L742.4 155.9 L745 161 L747.6 161 L750.3 161 L752.9 161 L755.5 161 L758.2 161 L760.8 161 L763.4 161 L766 161 L768.7 161 L771.3 161 L773.9 161 L776.5 161 L779.2 161 L781.8 161 L784.4 161 L787.1 150.9 L789.7 155.9 L792.3 150.9 L794.9 150.9 L797.6 155.9 L800.2 140.7 L802.8 158.5 L805.5 158.5 L808.1 155.9 L810.7 150.9 L813.3 140.7 L816 125.5 L818.6 161 L821.2 158.5 L823.8 161 L826.5 161 L829.1 161 L831.7 161 L834.4 161 L837 161 L839.6 158.5 L842.2 161 L844.9 161 L847.5 153.4 L850.1 155.9 L852.7 158.5 L855.4 161 L858 155.9" pathLength="1" fill="none" stroke="#B58900" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<g class="endpt"><circle class="pulse" cx="858" cy="155.9" r="2.6" fill="#2AA198"/></g>
+<line x1="598" y1="173" x2="858" y2="173" stroke="#839496" stroke-opacity="0.08"/>
+<text x="598" y="188" font-size="10.5" letter-spacing="1" fill="#839496" fill-opacity="0.55">ISSUES</text>
+<text class="num" x="598" y="220.5" font-size="28" font-weight="700" fill="#839496">52</text>
+<path class="spark" d="M724 220.5 L726.6 220.5 L729.3 220.5 L731.9 220.5 L734.5 220.5 L737.1 220.5 L739.8 220.5 L742.4 220.5 L745 220.5 L747.6 220.5 L750.3 220.5 L752.9 220.5 L755.5 220.5 L758.2 220.5 L760.8 220.5 L763.4 220.5 L766 220.5 L768.7 220.5 L771.3 220.5 L773.9 220.5 L776.5 220.5 L779.2 220.5 L781.8 220.5 L784.4 212.9 L787.1 215.4 L789.7 218 L792.3 220.5 L794.9 212.9 L797.6 218 L800.2 220.5 L802.8 220.5 L805.5 207.8 L808.1 218 L810.7 212.9 L813.3 215.4 L816 220.5 L818.6 220.5 L821.2 220.5 L823.8 220.5 L826.5 220.5 L829.1 220.5 L831.7 220.5 L834.4 220.5 L837 220.5 L839.6 220.5 L842.2 220.5 L844.9 220.5 L847.5 202.8 L850.1 220.5 L852.7 220.5 L855.4 185 L858 195.1" pathLength="1" fill="none" stroke="#B58900" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<g class="endpt"><circle class="pulse" cx="858" cy="195.1" r="2.6" fill="#2AA198"/></g>
+<line x1="598" y1="232.5" x2="858" y2="232.5" stroke="#839496" stroke-opacity="0.08"/>
+<text x="598" y="247.5" font-size="10.5" letter-spacing="1" fill="#839496" fill-opacity="0.55">REVIEWS</text>
+<text class="num" x="598" y="280" font-size="28" font-weight="700" fill="#839496">0</text>
+<path class="spark" d="M724 280 L726.6 280 L729.3 280 L731.9 280 L734.5 280 L737.1 280 L739.8 280 L742.4 280 L745 280 L747.6 280 L750.3 280 L752.9 280 L755.5 280 L758.2 280 L760.8 280 L763.4 280 L766 280 L768.7 280 L771.3 280 L773.9 280 L776.5 280 L779.2 280 L781.8 280 L784.4 280 L787.1 280 L789.7 280 L792.3 280 L794.9 280 L797.6 280 L800.2 280 L802.8 280 L805.5 280 L808.1 280 L810.7 280 L813.3 280 L816 280 L818.6 280 L821.2 280 L823.8 280 L826.5 280 L829.1 280 L831.7 280 L834.4 280 L837 280 L839.6 280 L842.2 280 L844.9 280 L847.5 280 L850.1 280 L852.7 280 L855.4 280 L858 280" pathLength="1" fill="none" stroke="#B58900" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<g class="endpt"><circle class="pulse" cx="858" cy="280" r="2.6" fill="#2AA198"/></g>
+<line x1="598" y1="292" x2="858" y2="292" stroke="#839496" stroke-opacity="0.08"/>
+<text x="598" y="314" font-size="10" letter-spacing="1" fill="#839496" fill-opacity="0.55">REPOS</text>
+<text class="num" x="598" y="338" font-size="20" font-weight="700" fill="#B58900">13</text>
+<text x="684.7" y="314" font-size="10" letter-spacing="1" fill="#839496" fill-opacity="0.55">STARS</text>
+<text class="num" x="684.7" y="338" font-size="20" font-weight="700" fill="#B58900">0</text>
+<text x="771.3" y="314" font-size="10" letter-spacing="1" fill="#839496" fill-opacity="0.55">FORKS</text>
+<text class="num" x="771.3" y="338" font-size="20" font-weight="700" fill="#B58900">0</text>
+<line x1="22" y1="364" x2="858" y2="364" stroke="#839496" stroke-opacity="0.08"/>
+<rect x="22" y="384" width="16" height="16" rx="3" fill="#bd9828"/>
+<text x="44" y="396.6" font-size="13" fill="#839496">Python 93.0%</text>
+<rect x="231" y="384" width="16" height="16" rx="3" fill="#77bd28"/>
+<text x="253" y="396.6" font-size="13" fill="#839496">C++ 3.3%</text>
+<rect x="440" y="384" width="16" height="16" rx="3" fill="#28bd45"/>
+<text x="462" y="396.6" font-size="13" fill="#839496">Go 2.9%</text>
+<rect x="649" y="384" width="16" height="16" rx="3" fill="#28bdb1"/>
+<text x="671" y="396.6" font-size="13" fill="#839496">Makefile 0.8%</text>
+<text x="22" y="424.6" font-size="13"><tspan font-weight="700" fill="#B58900">Region:</tspan><tspan dx="6" fill="#839496">each one represents a language</tspan></text>
+<text x="22" y="452.6" font-size="13"><tspan font-weight="700" fill="#B58900">Cell:</tspan><tspan dx="6" fill="#839496">each one represents a repository associated with a programming language.</tspan></text>
+<text x="22" y="480.6" font-size="13"><tspan font-weight="700" fill="#B58900">Opacity:</tspan><tspan dx="6" fill="#839496">proportional to how recently the repository was last pushed to (compared to the others)</tspan></text>
+<text x="707.1" y="480.6" font-size="13" text-anchor="end" fill="#839496">oldest</text>
+<rect x="715.1" y="468" width="16" height="16" rx="3" fill="#B58900" fill-opacity="0.15"/>
+<rect x="734.1" y="468" width="16" height="16" rx="3" fill="#B58900" fill-opacity="0.25"/>
+<rect x="753.1" y="468" width="16" height="16" rx="3" fill="#B58900" fill-opacity="0.35"/>
+<rect x="772.1" y="468" width="16" height="16" rx="3" fill="#B58900" fill-opacity="0.45"/>
+<rect x="791.1" y="468" width="16" height="16" rx="3" fill="#B58900" fill-opacity="0.55"/>
+<text x="858" y="480.6" font-size="13" text-anchor="end" fill="#839496">newest</text>
+</svg>

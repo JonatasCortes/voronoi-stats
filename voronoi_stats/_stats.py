@@ -1,8 +1,9 @@
 from __future__ import annotations
+
 from datetime import date
 from typing import NamedTuple
+
 from ._constants import (
-    ACTIVE_DAYS,
     ACTIVITY_KEYS,
     MAX_LANGUAGES,
     MIN_AREA_SHARE,
@@ -27,7 +28,6 @@ class RepoCell(NamedTuple):
     language: str  # name of a LanguageShare
     size: int  # bytes of this repo in that language
     opacity: float  # OPACITY_MIN..OPACITY_MAX, from the recency of the last push
-    active: bool  # pushed within ACTIVE_DAYS
 
 
 class ActivityMetric(NamedTuple):
@@ -158,12 +158,9 @@ def _build_cells(
     cells: list[RepoCell] = []
     for (repository, sizes), age in zip(pending, ages):
         opacity: float = _opacity(age, youngest, oldest)
-        active: bool = (today - repository.pushed_at.date()
-                        ).days <= ACTIVE_DAYS
         for name, size in sizes.items():
             if size > 0:
-                cells.append(RepoCell(repository.name,
-                             name, size, opacity, active))
+                cells.append(RepoCell(repository.name, name, size, opacity))
 
     # Fixed order: language rank, then biggest cell first, then repo name.
     cells.sort(key=lambda cell: (

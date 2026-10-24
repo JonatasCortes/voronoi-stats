@@ -1,3 +1,13 @@
+"""Draw a StatsReport as one SVG card.
+
+`render_svg(report, theme)` returns the SVG text. All positions come from
+constants.py, all texts from LABELS, all colors from the theme. The geometry
+(polygons) comes from geometry.py.
+
+Everything is deterministic: no dates, no random numbers, and numbers are always
+written with the same format, so the same report gives the same bytes.
+"""
+
 from __future__ import annotations
 
 import colorsys
@@ -28,15 +38,11 @@ from ._constants import (
     CELL_STROKE_W,
     DECIMAL_SEP,
     DIVIDER_OPACITY,
-    DOT_ACTIVE_R,
-    DOT_DORMANT_OPACITY,
-    DOT_DORMANT_R,
     FONT_FAMILY,
     FONT_FOOTER_LABEL,
     FONT_FOOTER_VALUE,
     FONT_HEADER,
     FONT_LEGEND,
-    FONT_LEGEND_NOTE,
     FONT_METRIC_LABEL,
     FONT_METRIC_VALUE,
     FONT_TITLE,
@@ -50,8 +56,12 @@ from ._constants import (
     LABEL_TEXT_OPACITY,
     LABELS,
     LEGEND_GAP,
-    LEGEND_H,
-    LEGEND_NOTE_OPACITY,
+    LEGEND_PAD_Y,
+    LEGEND_ROW_H,
+    LEGEND_SCALE_GAP,
+    LEGEND_SCALE_STEPS,
+    LEGEND_SWATCH,
+    LEGEND_SWATCH_RADIUS,
     OPACITY_MAX,
     OPACITY_MIN,
     OTHER_LABEL,
@@ -213,8 +223,6 @@ def _header_svg(theme: Theme) -> list[str]:
         f'<text x="{PAD + TITLE_X_OFFSET}" y="{baseline}" font-size="{_t(FONT_TITLE)}" '
         f'font-weight="700" letter-spacing="1" fill="{theme["accent"]}">'
         f'{escape(LABELS["title"])}</text>',
-        f'<text x="{PLOT_X + PLOT_W}" y="{baseline}" font-size="{_t(FONT_HEADER)}" '
-        f'text-anchor="end" fill="{theme["pulse"]}">{escape(LABELS["header_hint"])}</text>',
         f'<text x="{ACTIVITY_X}" y="{baseline}" font-size="{_t(FONT_HEADER)}" '
         f'letter-spacing="1" fill="{theme["pulse"]}">{escape(LABELS["header_activity"])}</text>',
     ]
@@ -238,7 +246,7 @@ def _cells_svg(cells: tuple[CellShape, ...], colors: dict[str, str], theme: Them
 
 
 def _overlay_svg(tmap: TerritoryMap, colors: dict[str, str], theme: Theme) -> list[str]:
-    """Territory outlines (double stroke) and one dot per cell."""
+    """Territory outlines (double stroke)."""
     lines: list[str] = ['<g class="terr">']
     for territory in tmap.territories:
         points: str = _points(territory.polygon)
@@ -251,18 +259,6 @@ def _overlay_svg(tmap: TerritoryMap, colors: dict[str, str], theme: Theme) -> li
             f'stroke-width="{_t(TERRITORY_LINE_W)}" stroke-opacity="{_t(TERRITORY_LINE_OPACITY)}" '
             'stroke-linejoin="round"/>'
         )
-    for shape in tmap.cells:
-        center_x, center_y = shape.center
-        if shape.cell.active:
-            lines.append(
-                f'<circle class="pulse" cx="{_n(center_x)}" cy="{_n(center_y)}" '
-                f'r="{_t(DOT_ACTIVE_R)}" fill="{theme["pulse"]}"/>'
-            )
-        else:
-            lines.append(
-                f'<circle cx="{_n(center_x)}" cy="{_n(center_y)}" r="{_t(DOT_DORMANT_R)}" '
-                f'fill="{theme["text"]}" fill-opacity="{_t(DOT_DORMANT_OPACITY)}"/>'
-            )
     lines.append("</g>")
     return lines
 
@@ -317,8 +313,8 @@ def _metric_svg(metric: ActivityMetric, top: float, row_h: float, theme: Theme) 
             f'stroke-width="{_t(SPARK_STROKE_W)}" stroke-linecap="round" stroke-linejoin="round"/>'
         )
         lines.append(
-            f'<circle class="endpt" cx="{_n(end_x)}" cy="{_n(end_y)}" r="{_t(SPARK_END_R)}" '
-            f'fill="{theme["pulse"]}"/>'
+            f'<g class="endpt"><circle class="pulse" cx="{_n(end_x)}" cy="{_n(end_y)}" '
+            f'r="{_t(SPARK_END_R)}" fill="{theme["pulse"]}"/></g>'
         )
     return lines
 
@@ -369,99 +365,96 @@ def _activity_svg(report: StatsReport, theme: Theme) -> list[str]:
 
 
 # ── Legend ──────────────────────────────────────────────────────────────────
-_LEGEND_LINES: int = 6  # the legend is split in this many rows of equal height
 # rough width of one character, as a fraction of font size
-_TEXT_WIDTH_FACTOR: float = 0.52
-_SWATCH_COUNT: int = 5
+_TEXT_WIDTH_FACTOR: float = 0.55
+_SWATCH_GAP: float = 6.0  # space between a color square and its text
+_CHIP_GAP: float = 12.0  # minimum space between two language entries
+_TITLE_GAP: float = 6.0  # space between a legend title and its explanation
+_SCALE_GAP: float = 8.0  # space between the opacity scale and its two labels
+
+
+def _text_width(text: str) -> float:
+    """Estimated width of a legend text (fonts cannot be measured here)."""
+    return len(text) * FONT_LEGEND * _TEXT_WIDTH_FACTOR
+
+
+def _fit_name(name: str, percent: str, room: float) -> str:
+    """Cut a long language name with an ellipsis so "name 12.3%" fits in `room`."""
+    if _text_width(f"{name} {percent}") <= room:
+        return name
+    shown: str = name
+    while len(shown) > 1 and _text_width(f"{shown.rstrip()}\u2026 {percent}") > room:
+        shown = shown[:-1]
+    return shown.rstrip() + "\u2026"
 
 
 def _legend_svg(report: StatsReport, colors: dict[str, str], theme: Theme) -> list[str]:
     top: float = float(PLOT_Y + PLOT_H + LEGEND_GAP)
-    pitch: float = LEGEND_H / _LEGEND_LINES
     left: float = float(PAD)
-    right: float = PAD + (CARD_W - 2 * PAD) / 2.0
-    text_color: str = theme["text"]
-    note_opacity: str = _t(LEGEND_NOTE_OPACITY)
+    right: float = float(CARD_W - PAD)
+    title_color: str = theme["legend_title"]
+    text_color: str = theme["legend_text"]
 
-    def baseline(line: int) -> float:
-        return top + pitch * line + 12.0
+    def row_center(row: int) -> float:
+        return top + LEGEND_PAD_Y + row * LEGEND_ROW_H + LEGEND_ROW_H / 2.0
 
-    def note(x: float, line: int, text: str) -> str:
-        return (
-            f'<text x="{_n(x + 14)}" y="{_n(baseline(line))}" font-size="{_t(FONT_LEGEND_NOTE)}" '
-            f'fill="{text_color}" fill-opacity="{note_opacity}">{escape(text)}</text>'
-        )
+    def baseline(row: int) -> float:
+        return row_center(row) + FONT_LEGEND * 0.35
 
-    def bullet(x: float, line: int) -> str:
-        return (
-            f'<circle cx="{_n(x + 3)}" cy="{_n(baseline(line) - 3.5)}" r="1.5" '
-            f'fill="{text_color}" fill-opacity="{note_opacity}"/>'
-        )
+    lines: list[str] = [_divider(left, right, top - LEGEND_GAP / 2.0, theme)]
 
-    def text_width(text: str) -> float:
-        return len(text) * FONT_LEGEND_NOTE * _TEXT_WIDTH_FACTOR
-
-    lines: list[str] = [
-        _divider(PAD, CARD_W - PAD, top - LEGEND_GAP / 2.0, theme)]
-
-    # Line 0 and 1: language colors with the real share of code
-    lines.extend([bullet(left, 0), note(left, 0, LABELS["legend_languages"])])
+    # Row 0: color square + name + real share of code, for each language
     if report.languages:
-        chip_w: float = min(160.0, (CARD_W - 2 * PAD) / len(report.languages))
+        chip_w: float = (right - left) / len(report.languages)
         for index, language in enumerate(report.languages):
             x: float = left + index * chip_w
-            label: str = f"{language.name} {format_percent(language.percent)}"
+            percent: str = format_percent(language.percent)
+            room: float = chip_w - LEGEND_SWATCH - _SWATCH_GAP - _CHIP_GAP
+            name: str = _fit_name(language.name, percent, room)
             lines.append(
-                f'<rect x="{_n(x)}" y="{_n(baseline(1) - 9)}" width="10" height="10" rx="2" '
+                f'<rect x="{_n(x)}" y="{_n(row_center(0) - LEGEND_SWATCH / 2.0)}" '
+                f'width="{LEGEND_SWATCH}" height="{LEGEND_SWATCH}" rx="{_t(LEGEND_SWATCH_RADIUS)}" '
                 f'fill="{colors[language.name]}"/>'
             )
             lines.append(
-                f'<text x="{_n(x + 14)}" y="{_n(baseline(1))}" font-size="{_t(FONT_LEGEND)}" '
-                f'fill="{text_color}">{escape(label)}</text>'
+                f'<text x="{_n(x + LEGEND_SWATCH + _SWATCH_GAP)}" y="{_n(baseline(0))}" '
+                f'font-size="{_t(FONT_LEGEND)}" fill="{text_color}">{escape(name)} {percent}</text>'
             )
 
-    # Plain text items
-    for x, line, key in (
-        (left, 2, "legend_territory"),
-        (left, 3, "legend_area"),
-        (left, 4, "legend_cell"),
-        (left, 5, "legend_activity"),
-    ):
-        lines.extend([bullet(x, line), note(x, line, LABELS[key])])
-
-    # Opacity: text + mini scale from oldest to newest
-    opacity_text: str = LABELS["legend_opacity"]
-    lines.extend([bullet(right, 2), note(right, 2, opacity_text)])
-    old_x: float = right + 14 + text_width(opacity_text) + 12
-    lines.append(
-        f'<text x="{_n(old_x)}" y="{_n(baseline(2))}" font-size="{_t(FONT_LEGEND_NOTE)}" '
-        f'fill="{text_color}" fill-opacity="{note_opacity}">{escape(LABELS["legend_opacity_old"])}</text>'
-    )
-    swatch_x: float = old_x + text_width(LABELS["legend_opacity_old"]) + 6
-    for index in range(_SWATCH_COUNT):
-        opacity: float = OPACITY_MIN + \
-            (OPACITY_MAX - OPACITY_MIN) * index / (_SWATCH_COUNT - 1)
+    # Rows 1-3: "Title: explanation" (title and explanation have their own colors)
+    for row, key in enumerate(("legend_region", "legend_cell", "legend_opacity"), start=1):
         lines.append(
-            f'<rect x="{_n(swatch_x + index * 11)}" y="{_n(baseline(2) - 8)}" width="10" height="8" '
-            f'rx="1.5" fill="{theme["accent"]}" fill-opacity="{_t(opacity)}"/>'
+            f'<text x="{_n(left)}" y="{_n(baseline(row))}" font-size="{_t(FONT_LEGEND)}">'
+            f'<tspan font-weight="700" fill="{title_color}">{escape(LABELS[key + "_title"])}</tspan>'
+            f'<tspan dx="{_n(_TITLE_GAP)}" fill="{text_color}">{escape(LABELS[key + "_text"])}</tspan>'
+            "</text>"
         )
-    new_x: float = swatch_x + _SWATCH_COUNT * 11 + 3
-    lines.append(
-        f'<text x="{_n(new_x)}" y="{_n(baseline(2))}" font-size="{_t(FONT_LEGEND_NOTE)}" '
-        f'fill="{text_color}" fill-opacity="{note_opacity}">{escape(LABELS["legend_opacity_new"])}</text>'
-    )
 
-    # Dots: active (pulsing) and dormant
-    lines.append(
-        f'<circle class="pulse" cx="{_n(right + 3)}" cy="{_n(baseline(3) - 3.5)}" '
-        f'r="{_t(DOT_ACTIVE_R)}" fill="{theme["pulse"]}"/>'
+    # Opacity scale (oldest -> newest), at the right end of the Opacity row
+    old_label: str = LABELS["legend_opacity_old"]
+    new_label: str = LABELS["legend_opacity_new"]
+    scale_w: float = float(
+        LEGEND_SCALE_STEPS * LEGEND_SWATCH +
+        (LEGEND_SCALE_STEPS - 1) * LEGEND_SCALE_GAP
     )
-    lines.append(note(right, 3, LABELS["legend_active"]))
+    scale_x: float = right - _text_width(new_label) - _SCALE_GAP - scale_w
     lines.append(
-        f'<circle cx="{_n(right + 3)}" cy="{_n(baseline(5) - 3.5)}" r="{_t(DOT_DORMANT_R)}" '
-        f'fill="{text_color}" fill-opacity="{_t(DOT_DORMANT_OPACITY)}"/>'
+        f'<text x="{_n(scale_x - _SCALE_GAP)}" y="{_n(baseline(3))}" font-size="{_t(FONT_LEGEND)}" '
+        f'text-anchor="end" fill="{text_color}">{escape(old_label)}</text>'
     )
-    lines.append(note(right, 5, LABELS["legend_dormant"]))
+    for index in range(LEGEND_SCALE_STEPS):
+        opacity: float = OPACITY_MIN + \
+            (OPACITY_MAX - OPACITY_MIN) * index / (LEGEND_SCALE_STEPS - 1)
+        lines.append(
+            f'<rect x="{_n(scale_x + index * (LEGEND_SWATCH + LEGEND_SCALE_GAP))}" '
+            f'y="{_n(row_center(3) - LEGEND_SWATCH / 2.0)}" width="{LEGEND_SWATCH}" '
+            f'height="{LEGEND_SWATCH}" rx="{_t(LEGEND_SWATCH_RADIUS)}" '
+            f'fill="{theme["accent"]}" fill-opacity="{_t(opacity)}"/>'
+        )
+    lines.append(
+        f'<text x="{_n(right)}" y="{_n(baseline(3))}" font-size="{_t(FONT_LEGEND)}" '
+        f'text-anchor="end" fill="{text_color}">{escape(new_label)}</text>'
+    )
     return lines
 
 

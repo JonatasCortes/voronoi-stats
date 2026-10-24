@@ -11,7 +11,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/python-3.12-3776AB?logo=python&logoColor=white" alt="Python 3.12">
   <img src="https://img.shields.io/badge/GitHub_Actions-automated-2088FF?logo=githubactions&logoColor=white" alt="GitHub Actions">
-  <img src="https://img.shields.io/badge/themes-27-ff0055" alt="27 themes">
+  <img src="https://img.shields.io/badge/themes-42-ff0055" alt="42 themes">
   <img src="https://img.shields.io/badge/dependencies-none-2ea44f" alt="No dependencies">
   <img src="https://img.shields.io/badge/output-SVG-FFB13B?logo=svg&logoColor=white" alt="SVG output">
 </p>
@@ -40,11 +40,14 @@ It is also as light as it can be: **plain Python, no external dependencies** (on
   - [What you can change](#what-you-can-change)
   - [Constants reference](#constants-reference)
 - [🎨 Themes](#themes)
-  - [1. Basic Colors](#1-basic-colors)
-  - [2. Year Seasons](#2-year-seasons)
-  - [3. Drinks](#3-drinks)
-  - [4. Countries and Culture](#4-countries-and-culture)
-  - [5. Classical UI](#5-classical-ui)
+  - [1. Dark Colors](#1-dark-colors)
+  - [2. Light Colors (Pastels)](#2-light-colors-pastels)
+  - [3. Nature & Seasons](#3-nature--seasons)
+  - [4. Drinks](#4-drinks)
+  - [5. Countries & Geography](#5-countries--geography)
+  - [6. Aesthetics & Culture](#6-aesthetics--culture)
+  - [7. Classical UI (Dev Themes)](#7-classical-ui-dev-themes)
+  - [8. Mythology & Concepts](#8-mythology--concepts)
 - [🩺 Troubleshooting](#troubleshooting)
 
 ---
@@ -54,12 +57,10 @@ It is also as light as it can be: **plain Python, no external dependencies** (on
 | What you see | What it means |
 | --- | --- |
 | **Territory** (a large colored region) | One programming language. The legend shows its color and its real share of your code. |
-| **Territory area** | Bytes of code in that language. Small languages get a minimum of 2.5% of the area so they stay visible. |
+| **Territory area** | The amount of code in that language. Small languages get a minimum of 2.5% of the area so they stay visible, which is why the legend shows the real percentages. |
 | **Cell** (a piece inside a territory) | One repository, in that language. A repository that uses several languages appears once in each of its territories. |
-| **Cell opacity** | How recent the last push was. The oldest push is the faintest, the newest is the strongest. It is measured in whole weeks, so it does not change every day. |
-| **Pulsing dot** | The repository received a push in the last 90 days. |
-| **Dim dot** | No recent activity. |
-| **Lines on the right** | Weekly activity for the last 12 months: commits, pull requests, issues and reviews. The big number is the 12-month total, and the dot marks the current week. |
+| **Cell opacity** | How recent the last push was, compared to your other repositories. Faint cells have the oldest pushes, solid cells have the newest. It is measured in whole weeks, so it does not change every day. |
+| **Lines on the right** | Weekly activity for the last 12 months: commits, pull requests, issues and reviews. The big number is the 12-month total, and the pulsing dot marks the current week. |
 | **REPOS / STARS / FORKS** | Totals of the repositories used in the map. |
 
 Some rules about the data:
@@ -104,7 +105,7 @@ concurrency:
 
 env:
   USERNAME: ${{ github.repository_owner }}
-  THEME: neon
+  THEME: cyberpunk
 
 jobs:
   update:
@@ -120,7 +121,7 @@ jobs:
 
       - name: Generate svg card
         env:
-          STATS_TOKEN: ${{ secrets.STATS_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: python voronoi-stats/main.py "$USERNAME" --theme "$THEME"
 
       - name: Save to repository if changed
@@ -176,7 +177,7 @@ With the token copied:
 
 1. Go to your profile repository on GitHub and open **Settings → Secrets and variables → Actions**.
 2. Click **New repository secret**.
-3. In **Name**, type exactly `STATS_TOKEN`.
+3. In **Name**, type exactly `CONTRIB_TOKEN`.
 4. In **Secret**, paste the token you just created.
 5. Click **Add secret**.
 
@@ -212,13 +213,13 @@ You can also generate the card locally, from the root of your profile repository
 ```bash
 # macOS / Linux
 export GH_TOKEN="your_token_here"
-python voronoi-stats/main.py YourGitHubUserName --theme neon
+python voronoi-stats/main.py YourGitHubUserName --theme cyberpunk
 ```
 
 ```powershell
 # Windows (PowerShell)
 $env:GH_TOKEN="your_token_here"
-python voronoi-stats/main.py YourGitHubUserName --theme neon
+python voronoi-stats/main.py YourGitHubUserName --theme cyberpunk
 ```
 
 The file is saved to `assets/stats.svg`.
@@ -242,7 +243,7 @@ Voronoi Stats was made to be adjusted to your taste, and there are two levels of
 > [!NOTE]
 > Any customization different from the ready-made [themes](#themes) must be done by modifying the file **`voronoi-stats/constants.py`**.
 
-A theme does not choose the color of each language directly. Instead, it defines the **color range** the languages are picked from: a start hue, an end hue, a saturation and a lightness. The biggest language gets the start of the range, the smallest gets the end, and the others are spread in between. This way a green theme gives you green-ish languages, a purple theme gives you purple-ish ones, and so on.
+A theme does not choose the color of each language directly. Instead, it defines the **color range** the languages are picked from: a start hue, an end hue, a saturation and a lightness. The biggest language gets the start of the range, the smallest gets the end, and the others are spread in between. This way a green theme gives you green-ish languages, a purple theme gives you purple-ish ones, and so on. Each theme also defines two legend colors: `legend_title` (for "Area:", "Cell:" and "Opacity:") and `legend_text` (for the explanations and the language names).
 
 In `constants.py` you can, for example, change how long the animation takes, translate every text of the card (title, legend, labels and number format) or change how many languages get their own territory.
 
@@ -252,12 +253,12 @@ Here is what each group of constants is for:
 
 | Group | Constants | What it controls |
 | --- | --- | --- |
-| **Texts** | `LABELS`, `THOUSANDS_SEP`, `DECIMAL_SEP`, `PERCENT_DECIMALS` | Every text of the card (title, legend, labels, accessibility description) and how numbers are written (`2,847` and `91.2%` by default) |
-| **Data rules** | `MAX_LANGUAGES`, `OTHER_LABEL`, `MIN_AREA_SHARE`, `ACTIVE_DAYS`, `OPACITY_MIN`, `OPACITY_MAX` | How many languages get a territory, the minimum area of a territory, how long a repository counts as "active", and the opacity range of the cells |
+| **Texts** | `LABELS`, `THOUSANDS_SEP`, `DECIMAL_SEP`, `PERCENT_DECIMALS` | Every text of the card (title, legend titles and explanations, labels, accessibility description) and how numbers are written (`2,847` and `91.2%` by default) |
+| **Data rules** | `MAX_LANGUAGES`, `OTHER_LABEL`, `MIN_AREA_SHARE`, `OPACITY_MIN`, `OPACITY_MAX` | How many languages get a territory, the minimum area of a territory, and the opacity range of the cells |
 | **Animation** | `ANIM_CELL_*`, `ANIM_TERRITORY_*`, `ANIM_SPARK_*`, `ANIM_NUM_*`, `ANIM_PULSE_*` | How long each part of the animation takes (in seconds) and when it starts |
-| **Drawing** | `CELL_STROKE_W`, `TERRITORY_*`, `DOT_*`, `SPARK_*`, `GLOW_*`, `*_OPACITY` | Line thickness, dot sizes, background glow and the transparency of the small elements |
+| **Drawing** | `CELL_STROKE_W`, `TERRITORY_*`, `SPARK_*`, `GLOW_*`, `*_OPACITY` | Line thickness, the size of the dot at the end of the charts, background glow and the transparency of the small elements |
 | **Typography** | `FONT_FAMILY`, `FONT_*` | The font and the size of every text |
-| **Card layout** | `CARD_W`, `PAD`, `HEADER_*`, `PLOT_*`, `LEGEND_*`, `ACTIVITY_*`, `FOOTER_STATS_H` | The size of the card and the position and spacing of the map, the legend and the activity column |
+| **Card layout** | `CARD_W`, `PAD`, `HEADER_*`, `PLOT_*`, `LEGEND_*`, `ACTIVITY_*`, `FOOTER_STATS_H` | The size of the card and the position and spacing of the map, the legend (row height, color squares, opacity scale) and the activity column |
 | **Geometry** | `POWER_MAX_ITER`, `POWER_TOLERANCE`, `POWER_STEP`, `SEED_MARGIN`, `DOMINANT_SHARE` | How the map is calculated and how the biggest language is placed |
 | **Output and GitHub API** | `OUTPUT_PATH`, `TOKEN_ENV`, `GRAPHQL_URL`, `REPOS_PAGE_SIZE`, `LANGS_PER_REPO` | Where the SVG is saved, the name of the token variable and how the data is requested from GitHub |
 
@@ -266,9 +267,9 @@ Here is what each group of constants is for:
 
 > [!CAUTION]
 > Be careful with the **Card layout**, **Geometry** and **Output and GitHub API** groups. Changing them can misalign the card or break the data download. If something goes wrong, restore the original values. Also remember that:
-> - if you change `ACTIVE_DAYS`, update the legend text in `LABELS` (`legend_active`), which says 90 days;
+> - each legend explanation must fit in one line of the card (about 100 characters), so keep your translations short;
 > - if you change `OUTPUT_PATH`, update the `git status` and `git add` paths in the workflow;
-> - if you change `STATS_TOKEN`, update the `STATS_TOKEN` name in the workflow.
+> - if you change `TOKEN_ENV`, update the `GH_TOKEN` name in the workflow.
 
 <p align="right"><a href="#table-of-contents">⬆ back to top</a></p>
 
@@ -277,282 +278,280 @@ Here is what each group of constants is for:
 ## Themes
 
 > [!NOTE]
-> Theme names are not case sensitive, and spaces, hyphens (`-`) and underscores (`_`) are ignored. So `"japanlight"`, `"Japan-Light"` and `"JAPAN_LIGHT"` all select the same theme.
+> Theme names are not case sensitive, and spaces, hyphens (`-`) and underscores (`_`) are ignored. So `"japan_light"`, `"Japan-Light"` and `"JAPANLIGHT"` all select the same theme.
 
-Jump straight to a block:
+Jump straight to a category:
 
 <table align="center">
   <thead>
     <tr>
-      <th align="center">🎨 Basic Colors</th>
-      <th align="center">🍂 Year Seasons</th>
+      <th align="center">🎨 Dark Colors</th>
+      <th align="center">💡 Light Colors</th>
+      <th align="center">🍂 Nature & Seasons</th>
       <th align="center">🍷 Drinks</th>
-      <th align="center">🌍 Countries & Culture</th>
-      <th align="center">💻 Classical UI</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td align="center"><a href="#1-basic-colors"><b>Explore Themes ↗</b></a></td>
-      <td align="center"><a href="#2-year-seasons"><b>Explore Themes ↗</b></a></td>
-      <td align="center"><a href="#3-drinks"><b>Explore Themes ↗</b></a></td>
-      <td align="center"><a href="#4-countries-and-culture"><b>Explore Themes ↗</b></a></td>
-      <td align="center"><a href="#5-classical-ui"><b>Explore Themes ↗</b></a></td>
+      <td align="center"><a href="#1-dark-colors"><b>Explore ↗</b></a></td>
+      <td align="center"><a href="#2-light-colors-pastels"><b>Explore ↗</b></a></td>
+      <td align="center"><a href="#3-nature--seasons"><b>Explore ↗</b></a></td>
+      <td align="center"><a href="#4-drinks"><b>Explore ↗</b></a></td>
+    </tr>
+  </tbody>
+  <thead>
+    <tr>
+      <th align="center">🌍 Countries & Geo</th>
+      <th align="center">🌸 Aesthetics & Culture</th>
+      <th align="center">💻 Classical UI (Dev)</th>
+      <th align="center">✨ Mythology</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="center"><a href="#5-countries--geography"><b>Explore ↗</b></a></td>
+      <td align="center"><a href="#6-aesthetics--culture"><b>Explore ↗</b></a></td>
+      <td align="center"><a href="#7-classical-ui-dev-themes"><b>Explore ↗</b></a></td>
+      <td align="center"><a href="#8-mythology--concepts"><b>Explore ↗</b></a></td>
     </tr>
   </tbody>
 </table>
 
-### 1. Basic Colors
+### 1. Dark Colors
 
-Simple, classic colors. Available themes: [`red`](#red) · [`orange`](#orange) · [`yellow`](#yellow) · [`green`](#green) · [`blue`](#blue) · [`purple`](#purple) · [`pink`](#pink)
+Simple, bold, and deep classic colors. 
+Available themes: [`red`](#red) · [`orange`](#orange) · [`yellow`](#yellow) · [`green`](#green) · [`blue`](#blue) · [`purple`](#purple) · [`obsidian`](#obsidian)
 
 #### Red
-
 `--theme red`
-
-<p align="center">
-  <img src="assets/stats_red.svg" alt="Code Territory card, red theme" width="800">
-</p>
+<p align="center"><img src="assets/stats_red.svg" alt="Code Territory card, red theme" width="800"></p>
 
 #### Orange
-
 `--theme orange`
-
-<p align="center">
-  <img src="assets/stats_orange.svg" alt="Code Territory card, orange theme" width="800">
-</p>
+<p align="center"><img src="assets/stats_orange.svg" alt="Code Territory card, orange theme" width="800"></p>
 
 #### Yellow
-
 `--theme yellow`
-
-<p align="center">
-  <img src="assets/stats_yellow.svg" alt="Code Territory card, yellow theme" width="800">
-</p>
+<p align="center"><img src="assets/stats_yellow.svg" alt="Code Territory card, yellow theme" width="800"></p>
 
 #### Green
-
 `--theme green`
-
-<p align="center">
-  <img src="assets/stats_green.svg" alt="Code Territory card, green theme" width="800">
-</p>
+<p align="center"><img src="assets/stats_green.svg" alt="Code Territory card, green theme" width="800"></p>
 
 #### Blue
-
 `--theme blue`
-
-<p align="center">
-  <img src="assets/stats_blue.svg" alt="Code Territory card, blue theme" width="800">
-</p>
+<p align="center"><img src="assets/stats_blue.svg" alt="Code Territory card, blue theme" width="800"></p>
 
 #### Purple
-
 `--theme purple`
+<p align="center"><img src="assets/stats_purple.svg" alt="Code Territory card, purple theme" width="800"></p>
 
-<p align="center">
-  <img src="assets/stats_purple.svg" alt="Code Territory card, purple theme" width="800">
-</p>
-
-#### Pink
-
-`--theme pink`
-
-<p align="center">
-  <img src="assets/stats_pink.svg" alt="Code Territory card, pink theme" width="800">
-</p>
+#### Obsidian
+`--theme obsidian`
+<p align="center"><img src="assets/stats_obsidian.svg" alt="Code Territory card, obsidian theme" width="800"></p>
 
 <p align="right"><a href="#themes">⬆ back to themes</a></p>
 
 ---
 
-### 2. Year Seasons
+### 2. Light Colors (Pastels)
 
-Softer, earthy palettes inspired by the four seasons. Available themes: [`spring`](#spring) · [`summer`](#summer) · [`autumn`](#autumn) · [`winter`](#winter)
+Beautifully tinted light backgrounds for a clean and fresh look. 
+Available themes: [`mint`](#mint) · [`lavender`](#lavender) · [`peach`](#peach) · [`sky`](#sky)
+
+#### Mint
+`--theme mint`
+<p align="center"><img src="assets/stats_mint.svg" alt="Code Territory card, mint theme" width="800"></p>
+
+#### Lavender
+`--theme lavender`
+<p align="center"><img src="assets/stats_lavender.svg" alt="Code Territory card, lavender theme" width="800"></p>
+
+#### Peach
+`--theme peach`
+<p align="center"><img src="assets/stats_peach.svg" alt="Code Territory card, peach theme" width="800"></p>
+
+#### Sky
+`--theme sky`
+<p align="center"><img src="assets/stats_sky.svg" alt="Code Territory card, sky theme" width="800"></p>
+
+<p align="right"><a href="#themes">⬆ back to themes</a></p>
+
+---
+
+### 3. Seasons
+
+Earthy and atmospheric palettes inspired by the natural world. 
+Available themes: [`spring`](#spring) · [`summer`](#summer) · [`autumn`](#autumn) · [`winter`](#winter)
 
 #### Spring
-
 `--theme spring`
-
-<p align="center">
-  <img src="assets/stats_spring.svg" alt="Code Territory card, spring theme" width="800">
-</p>
+<p align="center"><img src="assets/stats_spring.svg" alt="Code Territory card, spring theme" width="800"></p>
 
 #### Summer
-
 `--theme summer`
-
-<p align="center">
-  <img src="assets/stats_summer.svg" alt="Code Territory card, summer theme" width="800">
-</p>
+<p align="center"><img src="assets/stats_summer.svg" alt="Code Territory card, summer theme" width="800"></p>
 
 #### Autumn
-
 `--theme autumn`
-
-<p align="center">
-  <img src="assets/stats_autumn.svg" alt="Code Territory card, autumn theme" width="800">
-</p>
+<p align="center"><img src="assets/stats_autumn.svg" alt="Code Territory card, autumn theme" width="800"></p>
 
 #### Winter
-
 `--theme winter`
-
-<p align="center">
-  <img src="assets/stats_winter.svg" alt="Code Territory card, winter theme" width="800">
-</p>
+<p align="center"><img src="assets/stats_winter.svg" alt="Code Territory card, winter theme" width="800"></p>
 
 <p align="right"><a href="#themes">⬆ back to themes</a></p>
 
 ---
 
-### 3. Drinks
+### 4. Drinks
 
-Warm tones inspired by classic drinks. Available themes: [`wine`](#wine) · [`beer`](#beer)
+Warm tones and aesthetics inspired by classic beverages. 
+Available themes: [`wine`](#wine) · [`beer`](#beer) · [`coffee`](#coffee) · [`matcha`](#matcha)
 
 #### Wine
-
 `--theme wine`
-
-<p align="center">
-  <img src="assets/stats_wine.svg" alt="Code Territory card, wine theme" width="800">
-</p>
+<p align="center"><img src="assets/stats_wine.svg" alt="Code Territory card, wine theme" width="800"></p>
 
 #### Beer
-
 `--theme beer`
+<p align="center"><img src="assets/stats_beer.svg" alt="Code Territory card, beer theme" width="800"></p>
 
-<p align="center">
-  <img src="assets/stats_beer.svg" alt="Code Territory card, beer theme" width="800">
-</p>
+#### Coffee
+`--theme coffee`
+<p align="center"><img src="assets/stats_coffee.svg" alt="Code Territory card, coffee theme" width="800"></p>
+
+#### Matcha
+`--theme matcha`
+<p align="center"><img src="assets/stats_matcha.svg" alt="Code Territory card, matcha theme" width="800"></p>
 
 <p align="right"><a href="#themes">⬆ back to themes</a></p>
 
 ---
 
-### 4. Countries and Culture
+### 5. Countries & Geography
 
-Colors inspired by flags and cultural symbols. Available themes: [`brazil`](#brazil) · [`usa`](#usa) · [`france`](#france) · [`india`](#india) · [`china`](#china) · [`japan`](#japan) · [`japanlight`](#japanlight) · [`sakura`](#sakura)
+Colors inspired by flags and cultural landmarks. 
+Available themes: [`brazil`](#brazil) · [`usa`](#usa) · [`france`](#france) · [`japan_dark`](#japan_dark) · [`japan_light`](#japan_light) · [`india`](#india) · [`mexico`](#mexico) · [`greece`](#greece) · [`egypt`](#egypt)
 
 #### Brazil
-
 `--theme brazil`
-
-<p align="center">
-  <img src="assets/stats_brazil.svg" alt="Code Territory card, brazil theme" width="800">
-</p>
+<p align="center"><img src="assets/stats_brazil.svg" alt="Code Territory card, brazil theme" width="800"></p>
 
 #### USA
-
 `--theme usa`
-
-<p align="center">
-  <img src="assets/stats_usa.svg" alt="Code Territory card, usa theme" width="800">
-</p>
+<p align="center"><img src="assets/stats_usa.svg" alt="Code Territory card, usa theme" width="800"></p>
 
 #### France
-
 `--theme france`
+<p align="center"><img src="assets/stats_france.svg" alt="Code Territory card, france theme" width="800"></p>
 
-<p align="center">
-  <img src="assets/stats_france.svg" alt="Code Territory card, france theme" width="800">
-</p>
+#### Japan Dark
+`--theme japan_dark`
+<p align="center"><img src="assets/stats_japan_dark.svg" alt="Code Territory card, japan_dark theme" width="800"></p>
+
+#### Japan Light
+`--theme japan_light`
+<p align="center"><img src="assets/stats_japan_light.svg" alt="Code Territory card, japan_light theme" width="800"></p>
 
 #### India
-
 `--theme india`
+<p align="center"><img src="assets/stats_india.svg" alt="Code Territory card, india theme" width="800"></p>
 
-<p align="center">
-  <img src="assets/stats_india.svg" alt="Code Territory card, india theme" width="800">
-</p>
+#### Mexico
+`--theme mexico`
+<p align="center"><img src="assets/stats_mexico.svg" alt="Code Territory card, mexico theme" width="800"></p>
 
-#### China
+#### Greece
+`--theme greece`
+<p align="center"><img src="assets/stats_greece.svg" alt="Code Territory card, greece theme" width="800"></p>
 
-`--theme china`
-
-<p align="center">
-  <img src="assets/stats_china.svg" alt="Code Territory card, china theme" width="800">
-</p>
-
-#### Japan
-
-`--theme japan`
-
-<p align="center">
-  <img src="assets/stats_japan.svg" alt="Code Territory card, japan theme" width="800">
-</p>
-
-#### Japanlight
-
-`--theme japanlight`
-
-<p align="center">
-  <img src="assets/stats_japanlight.svg" alt="Code Territory card, japanlight theme" width="800">
-</p>
-
-#### Sakura
-
-`--theme sakura`
-
-<p align="center">
-  <img src="assets/stats_sakura.svg" alt="Code Territory card, sakura theme" width="800">
-</p>
+#### Egypt
+`--theme egypt`
+<p align="center"><img src="assets/stats_egypt.svg" alt="Code Territory card, egypt theme" width="800"></p>
 
 <p align="right"><a href="#themes">⬆ back to themes</a></p>
 
 ---
 
-### 5. Classical UI
+### 6. Aesthetics & Culture
 
-Popular palettes from well-known editors and interface styles, plus a few dramatic ones. Available themes: [`dracula`](#dracula) · [`mocha`](#mocha) · [`neon`](#neon) · [`atlas`](#atlas) · [`heaven`](#heaven) · [`hell`](#hell)
-
-#### Dracula
-
-`--theme dracula`
-
-<p align="center">
-  <img src="assets/stats_dracula.svg" alt="Code Territory card, dracula theme" width="800">
-</p>
-
-#### Mocha
-
-`--theme mocha`
-
-<p align="center">
-  <img src="assets/stats_mocha.svg" alt="Code Territory card, mocha theme" width="800">
-</p>
+Highly stylized themes based on internet cultures and artistic movements. 
+Available themes: [`cyberpunk`](#cyberpunk) · [`steampunk`](#steampunk) · [`synthwave`](#synthwave) · [`lofi`](#lofi)
 
 #### Neon
-
 `--theme neon`
+<p align="center"><img src="assets/stats_neon.svg" alt="Code Territory card, neon theme" width="800"></p>
 
-<p align="center">
-  <img src="assets/stats_neon.svg" alt="Code Territory card, neon theme" width="800">
-</p>
+#### Cyberpunk
+`--theme cyberpunk`
+<p align="center"><img src="assets/stats_cyberpunk.svg" alt="Code Territory card, cyberpunk theme" width="800"></p>
 
-#### Atlas
+#### Steampunk
+`--theme steampunk`
+<p align="center"><img src="assets/stats_steampunk.svg" alt="Code Territory card, steampunk theme" width="800"></p>
 
-`--theme atlas`
+#### Synthwave
+`--theme synthwave`
+<p align="center"><img src="assets/stats_synthwave.svg" alt="Code Territory card, synthwave theme" width="800"></p>
 
-<p align="center">
-  <img src="assets/stats_atlas.svg" alt="Code Territory card, atlas theme" width="800">
-</p>
+#### Lofi
+`--theme lofi`
+<p align="center"><img src="assets/stats_lofi.svg" alt="Code Territory card, lofi theme" width="800"></p>
+
+<p align="right"><a href="#themes">⬆ back to themes</a></p>
+
+---
+
+### 7. Classical UI (Dev Themes)
+
+Beloved themes from your favorite code editors and IDEs. 
+Available themes: [`dracula`](#dracula) · [`mocha`](#mocha) · [`latte`](#latte) · [`nord`](#nord) · [`solarized_dark`](#solarized_dark) · [`solarized_light`](#solarized_light)
+
+#### Dracula
+`--theme dracula`
+<p align="center"><img src="assets/stats_dracula.svg" alt="Code Territory card, dracula theme" width="800"></p>
+
+#### Mocha
+`--theme mocha`
+<p align="center"><img src="assets/stats_mocha.svg" alt="Code Territory card, mocha theme" width="800"></p>
+
+#### Latte
+`--theme latte`
+<p align="center"><img src="assets/stats_latte.svg" alt="Code Territory card, latte theme" width="800"></p>
+
+#### Nord
+`--theme nord`
+<p align="center"><img src="assets/stats_nord.svg" alt="Code Territory card, nord theme" width="800"></p>
+
+#### Solarized Dark
+`--theme solarized_dark`
+<p align="center"><img src="assets/stats_solarized_dark.svg" alt="Code Territory card, solarized_dark theme" width="800"></p>
+
+#### Solarized Light
+`--theme solarized_light`
+<p align="center"><img src="assets/stats_solarized_light.svg" alt="Code Territory card, solarized_light theme" width="800"></p>
+
+<p align="right"><a href="#themes">⬆ back to themes</a></p>
+
+---
+
+### 8. Mythology & Concepts
+
+Epic, concept-driven abstract aesthetics. 
+Available themes: [`heaven`](#heaven) · [`hell`](#hell) · [`abyss`](#abyss)
 
 #### Heaven
-
 `--theme heaven`
-
-<p align="center">
-  <img src="assets/stats_heaven.svg" alt="Code Territory card, heaven theme" width="800">
-</p>
+<p align="center"><img src="assets/stats_heaven.svg" alt="Code Territory card, heaven theme" width="800"></p>
 
 #### Hell
-
 `--theme hell`
+<p align="center"><img src="assets/stats_hell.svg" alt="Code Territory card, hell theme" width="800"></p>
 
-<p align="center">
-  <img src="assets/stats_hell.svg" alt="Code Territory card, hell theme" width="800">
-</p>
+#### Abyss
+`--theme abyss`
+<p align="center"><img src="assets/stats_abyss.svg" alt="Code Territory card, abyss theme" width="800"></p>
 
 <p align="right"><a href="#themes">⬆ back to themes</a> · <a href="#table-of-contents">⬆ back to top</a></p>
 
