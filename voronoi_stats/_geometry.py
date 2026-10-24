@@ -3,7 +3,6 @@ import hashlib
 import math
 from typing import Final, NamedTuple
 from voronoi_stats._constants import (
-    DOMINANT_SHARE,
     POWER_MAX_ITER,
     POWER_STEP,
     POWER_TOLERANCE,
@@ -16,6 +15,8 @@ Polygon = list[Point]
 
 # rounds that move repo points to their cell centers
 _RELAX_STEPS: Final[int] = 3
+# same idea for the language territories (starts from a treemap, so few rounds are enough)
+_TERRITORY_RELAX_STEPS: Final[int] = 3
 # tries to find a hash point inside a territory
 _SEED_ATTEMPTS: Final[int] = 64
 _MIN_SLOPE: Final[float] = 0.5  # keeps weight steps small for odd-shaped cells
@@ -170,28 +171,87 @@ def _fit_cells(sites: list[Point], targets: list[float], region: Polygon) -> lis
     return cells
 
 
-# ── Level 1: territories ────────────────────────────────────────────────────
-def _territory_sites(languages: tuple[LanguageShare, ...], bounds: Bounds) -> list[Point]:
-    """Starting points: the biggest language on the right, the others in a left column."""
-    if len(languages) == 1:
-        return [(bounds.x + bounds.width / 2.0, bounds.y + bounds.height / 2.0)]
+def _relax(sites: list[Point], targets: list[float], region: Polygon, steps: int) -> list[Polygon]:
+    """Fit the cells, then repeat `steps` times: move each site to the center
+    of its cell and fit again. This spreads the sites out and evens the shapes."""
+    polygons: list[Polygon] = _fit_cells(sites, targets, region)
+    for _ in range(steps):
+        sites = [
+            _centroid(polygon) if len(polygon) >= 3 else site
+            for site, polygon in zip(sites, polygons)
+        ]
+        polygons = _fit_cells(sites, targets, region)
+    return polygons
 
-    column_width: float = bounds.width * (1.0 - DOMINANT_SHARE)
-    sites: list[Point] = [
-        (
-            bounds.x + column_width + bounds.width * DOMINANT_SHARE / 2.0,
-            bounds.y + bounds.height / 2.0,
-        )
-    ]
-    others: tuple[LanguageShare, ...] = languages[1:]
-    others_total: float = sum(language.area_weight for language in others)
-    used: float = 0.0
-    for language in others:
-        middle: float = (used + language.area_weight / 2.0) / others_total
-        sites.append((bounds.x + column_width / 2.0,
-                     bounds.y + bounds.height * middle))
-        used += language.area_weight
-    return sites
+
+# ── Treemap (starting layout for the territories) ───────────────────────────
+def _worst_ratio(areas: list[float], side: float) -> float:
+    """Worst aspect ratio (always >= 1) if `areas` are laid out as one row
+    along a side of length `side`."""
+    total: float = sum(areas)
+    if total <= 0.0 or side <= 0.0:
+        return math.inf
+    return max(
+        max(side * side * area / (total * total),
+            total * total / (side * side * area))
+        for area in areas
+    )
+
+
+def _squarify(areas: list[float], bounds: Bounds) -> list[Bounds]:
+    """Squarified treemap: one rectangle per area, as close to square as possible.
+
+    The areas should add up to the area of `bounds`. The result is in the same
+    order as `areas`. Biggest areas are placed first; equal areas keep their
+    input order, so the layout is deterministic.
+    """
+    order: list[int] = sorted(range(len(areas)), key=lambda i: (-areas[i], i))
+    rects: list[Bounds] = [bounds] * len(areas)
+    x, y, w, h = bounds
+    position: int = 0
+    while position < len(order):
+        side: float = min(w, h)
+        row: list[int] = [order[position]]
+        position += 1
+        while position < len(order):
+            candidate: int = order[position]
+            if _worst_ratio([areas[i] for i in row] + [areas[candidate]], side) > _worst_ratio(
+                [areas[i] for i in row], side
+            ):
+                break
+            row.append(candidate)
+            position += 1
+
+        row_total: float = sum(areas[i] for i in row)
+        is_last: bool = position >= len(order)
+        if w >= h:
+            # the row is a column on the left, as tall as the free area
+            thickness: float = w if is_last else row_total / h
+            offset: float = y
+            for i in row:
+                length: float = areas[i] / \
+                    thickness if thickness > 0.0 else 0.0
+                rects[i] = Bounds(x, offset, thickness, length)
+                offset += length
+            x += thickness
+            w -= thickness
+        else:
+            # the row is a strip on the top, as wide as the free area
+            thickness = h if is_last else row_total / w
+            offset = x
+            for i in row:
+                length = areas[i] / thickness if thickness > 0.0 else 0.0
+                rects[i] = Bounds(offset, y, length, thickness)
+                offset += length
+            y += thickness
+            h -= thickness
+    return rects
+
+
+# ── Level 1: territories ────────────────────────────────────────────────────
+def _territory_sites(targets: list[float], bounds: Bounds) -> list[Point]:
+    """Starting points: the center of each rectangle of a squarified treemap."""
+    return [(r.x + r.width / 2.0, r.y + r.height / 2.0) for r in _squarify(targets, bounds)]
 
 
 def _build_territories(
@@ -203,7 +263,8 @@ def _build_territories(
     total_area: float = bounds.width * bounds.height
     targets: list[float] = [language.area_weight *
                             total_area for language in languages]
-    return _fit_cells(_territory_sites(languages, bounds), targets, region)
+    sites: list[Point] = _territory_sites(targets, bounds)
+    return _relax(sites, targets, region, _TERRITORY_RELAX_STEPS)
 
 
 # ── Level 2: repo cells inside a territory ──────────────────────────────────
@@ -243,15 +304,7 @@ def _build_cells_in(region: Polygon, language: str, cells: list[RepoCell]) -> li
 
     sites: list[Point] = [_seed_inside(
         region, f"{language}|{cell.repo}") for cell in cells]
-    polygons: list[Polygon] = _fit_cells(sites, targets, region)
-    # Spread the points out: move each one to the center of its cell, then refit.
-    for _ in range(_RELAX_STEPS):
-        sites = [
-            _centroid(polygon) if len(polygon) >= 3 else site
-            for site, polygon in zip(sites, polygons)
-        ]
-        polygons = _fit_cells(sites, targets, region)
-    return polygons
+    return _relax(sites, targets, region, _RELAX_STEPS)
 
 
 # ── Public entry point ──────────────────────────────────────────────────────

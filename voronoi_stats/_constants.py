@@ -74,8 +74,6 @@ POWER_TOLERANCE: Final[float] = 0.01
 POWER_STEP: Final[float] = 0.5        # damping for weight updates (0-1)
 # keep initial points this fraction away from the edges
 SEED_MARGIN: Final[float] = 0.08
-DOMINANT_SHARE: Final[float] = 0.60   # dominant language takes the large block
-# (others are stacked in a column on the left)
 
 # ── Drawing ─────────────────────────────────────────────────────────────────
 CELL_STROKE_W: Final[float] = 1.4
