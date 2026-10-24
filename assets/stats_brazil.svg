@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="502" viewBox="0 0 880 502" font-family="Arial,Helvetica,sans-serif" role="img" aria-labelledby="svg-title svg-desc">
+<title id="svg-title">Code Territory</title>
+<desc id="svg-desc">Weighted Voronoi map of JonatasCortes's repositories: each territory is a language and each cell is a repository, with area proportional to bytes of code. Opacity shows how recent the last push was. On the right, weekly activity for the last 12 months.</desc>
+<style>.cell{animation:cell-in 0.9s ease-out both}.terr{animation:fade-in 1s ease-out 1.6s both}.spark{stroke-dasharray:1;stroke-dashoffset:0;animation:draw 1.8s ease-out 0.5s both}.num{animation:fade-in 0.8s ease-out 0.4s both}.endpt{animation:fade-in 0.8s ease-out 2.3s both}.pulse{animation:pulse 6s ease-in-out 2.4s infinite}@keyframes cell-in{from{opacity:0;transform:scale(0.55)}to{opacity:1;transform:scale(1)}}@keyframes fade-in{from{opacity:0}to{opacity:1}}@keyframes draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}@media (prefers-reduced-motion:reduce){.cell,.terr,.spark,.num,.endpt,.pulse{animation:none}}</style>
+<defs><linearGradient id="border" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F4C84A"/><stop offset="1" stop-color="#16845D"/></linearGradient><radialGradient id="glow"><stop offset="0" stop-color="#249B72" stop-opacity="0.16"/><stop offset="1" stop-color="#249B72" stop-opacity="0"/></radialGradient><clipPath id="card-clip"><rect x="1" y="1" width="878" height="500" rx="15"/></clipPath><clipPath id="plot-clip"><rect x="22" y="54" width="550" height="300" rx="10"/></clipPath></defs>
+<rect x="1" y="1" width="878" height="500" rx="15" fill="#0C1714" stroke="url(#border)" stroke-width="2"/>
+<ellipse cx="440" cy="251" rx="380" ry="200" fill="url(#glow)" clip-path="url(#card-clip)"/>
+<rect x="22" y="22" width="4" height="22" rx="2" fill="#249B72"/>
+<text x="37" y="39" font-size="18" font-weight="700" letter-spacing="1" fill="#249B72">CODE TERRITORY</text>
+<text x="572" y="39" font-size="12" text-anchor="end" fill="#F4C84A">1 cell = 1 repository · area = code</text>
+<text x="598" y="39" font-size="12" letter-spacing="1" fill="#F4C84A">ACTIVITY · 12 MONTHS</text>
+<rect x="22" y="54" width="550" height="300" rx="10" fill="#172720"/>
+<g clip-path="url(#plot-clip)">
+<polygon class="cell" points="205.4,221.5 203.4,217.5 262.8,54 428.2,54 463.3,142.4 363.1,304.3" fill="#18dc9b" fill-opacity="0.54" stroke="#0C1714" stroke-width="1.4" stroke-linejoin="round" style="transform-origin:335.2px 162.4px;animation-delay:0.15s"/>
+<polygon class="cell" points="363.1,304.3 463.3,142.4 572,157.4 572,354 373.8,354" fill="#18dc9b" fill-opacity="0.53" stroke="#0C1714" stroke-width="1.4" stroke-linejoin="round" style="transform-origin:483.2px 261.9px;animation-delay:0.19s"/>
+<polygon class="cell" points="63.2,279.3 60.2,214.4 164.2,199.8 203.4,217.5 205.4,221.5 167.2,354 92.2,354" fill="#18dc9b" fill-opacity="0.55" stroke="#0C1714" stroke-width="1.4" stroke-linejoin="round" style="transform-origin:129.5px 273.1px;animation-delay:0.23s"/>
+<polygon class="cell" points="205.4,221.5 363.1,304.3 373.8,354 167.2,354" fill="#18dc9b" fill-opacity="0.55" stroke="#0C1714" stroke-width="1.4" stroke-linejoin="round" style="transform-origin:262px 306.5px;animation-delay:0.27s"/>
+<polygon class="cell" points="164.2,199.8 128.7,54 262.8,54 203.4,217.5" fill="#18dc9b" fill-opacity="0.15" stroke="#0C1714" stroke-width="1.4" stroke-linejoin="round" style="transform-origin:192.1px 117.6px;animation-delay:0.31s"/>
+<polygon class="cell" points="463.3,142.4 428.2,54 572,54 572,157.4" fill="#18dc9b" fill-opacity="0.36" stroke="#0C1714" stroke-width="1.4" stroke-linejoin="round" style="transform-origin:510.3px 99.6px;animation-delay:0.35s"/>
+<polygon class="cell" points="164.2,199.8 60.2,214.4 57.4,155.1 91.8,54 128.7,54" fill="#18dc9b" fill-opacity="0.5" stroke="#0C1714" stroke-width="1.4" stroke-linejoin="round" style="transform-origin:107.1px 142.6px;animation-delay:0.39s"/>
+<polygon class="cell" points="57.4,155.1 22,155.1 22,54 91.8,54" fill="#18dc1e" fill-opacity="0.31" stroke="#0C1714" stroke-width="1.4" stroke-linejoin="round" style="transform-origin:49.3px 99.1px;animation-delay:0.43s"/>
+<polygon class="cell" points="22,279.3 22,155.1 57.4,155.1 63.2,279.3" fill="#90dc18" fill-opacity="0.52" stroke="#0C1714" stroke-width="1.4" stroke-linejoin="round" style="transform-origin:41.2px 218.8px;animation-delay:0.47s"/>
+<polygon class="cell" points="22,279.3 63.2,279.3 92.2,354 22,354" fill="#dcab18" fill-opacity="0.53" stroke="#0C1714" stroke-width="1.4" stroke-linejoin="round" style="transform-origin:50.5px 319.9px;animation-delay:0.51s"/>
+<g class="terr">
+<polygon points="63.2,279.3 57.4,155.1 91.8,54 572,54 572,354 92.2,354" fill="none" stroke="#0C1714" stroke-width="3.4" stroke-linejoin="round"/>
+<polygon points="63.2,279.3 57.4,155.1 91.8,54 572,54 572,354 92.2,354" fill="none" stroke="#18dc9b" stroke-width="1.2" stroke-opacity="0.9" stroke-linejoin="round"/>
+<polygon points="57.4,155.1 22,155.1 22,54 91.8,54" fill="none" stroke="#0C1714" stroke-width="3.4" stroke-linejoin="round"/>
+<polygon points="57.4,155.1 22,155.1 22,54 91.8,54" fill="none" stroke="#18dc1e" stroke-width="1.2" stroke-opacity="0.9" stroke-linejoin="round"/>
+<polygon points="22,279.3 22,155.1 57.4,155.1 63.2,279.3" fill="none" stroke="#0C1714" stroke-width="3.4" stroke-linejoin="round"/>
+<polygon points="22,279.3 22,155.1 57.4,155.1 63.2,279.3" fill="none" stroke="#90dc18" stroke-width="1.2" stroke-opacity="0.9" stroke-linejoin="round"/>
+<polygon points="22,279.3 63.2,279.3 92.2,354 22,354" fill="none" stroke="#0C1714" stroke-width="3.4" stroke-linejoin="round"/>
+<polygon points="22,279.3 63.2,279.3 92.2,354 22,354" fill="none" stroke="#dcab18" stroke-width="1.2" stroke-opacity="0.9" stroke-linejoin="round"/>
+<circle class="pulse" cx="335.2" cy="162.4" r="2.6" fill="#F4C84A"/>
+<circle class="pulse" cx="483.2" cy="261.9" r="2.6" fill="#F4C84A"/>
+<circle class="pulse" cx="129.5" cy="273.1" r="2.6" fill="#F4C84A"/>
+<circle class="pulse" cx="262" cy="306.5" r="2.6" fill="#F4C84A"/>
+<circle cx="192.1" cy="117.6" r="1.5" fill="#E8E2C9" fill-opacity="0.4"/>
+<circle cx="510.3" cy="99.6" r="1.5" fill="#E8E2C9" fill-opacity="0.4"/>
+<circle class="pulse" cx="107.1" cy="142.6" r="2.6" fill="#F4C84A"/>
+<circle cx="49.3" cy="99.1" r="1.5" fill="#E8E2C9" fill-opacity="0.4"/>
+<circle class="pulse" cx="41.2" cy="218.8" r="2.6" fill="#F4C84A"/>
+<circle class="pulse" cx="50.5" cy="319.9" r="2.6" fill="#F4C84A"/>
+</g>
+</g>
+<rect x="22" y="54" width="550" height="300" rx="10" fill="none" stroke="#249B72" stroke-opacity="0.28"/>
+<text x="598" y="69" font-size="10.5" letter-spacing="1" fill="#E8E2C9" fill-opacity="0.55">COMMITS</text>
+<text class="num" x="598" y="101.5" font-size="28" font-weight="700" fill="#E8E2C9">646</text>
+<path class="spark" d="M724 100.1 L726.6 99.1 L729.3 97.7 L731.9 98.6 L734.5 84.7 L737.1 85.2 L739.8 101.5 L742.4 101.5 L745 101.5 L747.6 101.5 L750.3 101.5 L752.9 101.5 L755.5 101.5 L758.2 101.5 L760.8 99.6 L763.4 98.1 L766 101.5 L768.7 101.5 L771.3 101.5 L773.9 101.5 L776.5 101.5 L779.2 101.5 L781.8 98.1 L784.4 101 L787.1 93.8 L789.7 99.6 L792.3 98.6 L794.9 79 L797.6 87.6 L800.2 73.2 L802.8 91.9 L805.5 99.1 L808.1 82.8 L810.7 89.5 L813.3 72.2 L816 66 L818.6 101.5 L821.2 99.1 L823.8 101.5 L826.5 101.5 L829.1 97.2 L831.7 101.5 L834.4 100.5 L837 99.1 L839.6 100.1 L842.2 97.7 L844.9 98.1 L847.5 93.8 L850.1 89 L852.7 98.1 L855.4 95.7 L858 77" pathLength="1" fill="none" stroke="#249B72" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<circle class="endpt" cx="858" cy="77" r="2.6" fill="#F4C84A"/>
+<line x1="598" y1="113.5" x2="858" y2="113.5" stroke="#E8E2C9" stroke-opacity="0.08"/>
+<text x="598" y="128.5" font-size="10.5" letter-spacing="1" fill="#E8E2C9" fill-opacity="0.55">PULL REQUESTS</text>
+<text class="num" x="598" y="161" font-size="28" font-weight="700" fill="#E8E2C9">94</text>
+<path class="spark" d="M724 161 L726.6 161 L729.3 161 L731.9 156.8 L734.5 138 L737.1 152.6 L739.8 148.5 L742.4 154.7 L745 161 L747.6 161 L750.3 161 L752.9 161 L755.5 161 L758.2 161 L760.8 161 L763.4 161 L766 161 L768.7 161 L771.3 161 L773.9 161 L776.5 161 L779.2 161 L781.8 161 L784.4 161 L787.1 152.6 L789.7 156.8 L792.3 152.6 L794.9 152.6 L797.6 158.9 L800.2 144.3 L802.8 154.7 L805.5 158.9 L808.1 156.8 L810.7 152.6 L813.3 148.5 L816 125.5 L818.6 161 L821.2 158.9 L823.8 161 L826.5 161 L829.1 161 L831.7 161 L834.4 161 L837 161 L839.6 158.9 L842.2 161 L844.9 161 L847.5 154.7 L850.1 152.6 L852.7 158.9 L855.4 161 L858 156.8" pathLength="1" fill="none" stroke="#249B72" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<circle class="endpt" cx="858" cy="156.8" r="2.6" fill="#F4C84A"/>
+<line x1="598" y1="173" x2="858" y2="173" stroke="#E8E2C9" stroke-opacity="0.08"/>
+<text x="598" y="188" font-size="10.5" letter-spacing="1" fill="#E8E2C9" fill-opacity="0.55">ISSUES</text>
+<text class="num" x="598" y="220.5" font-size="28" font-weight="700" fill="#E8E2C9">63</text>
+<path class="spark" d="M724 220.5 L726.6 220.5 L729.3 220.5 L731.9 220.5 L734.5 220.5 L737.1 220.5 L739.8 220.5 L742.4 220.5 L745 220.5 L747.6 220.5 L750.3 220.5 L752.9 220.5 L755.5 220.5 L758.2 220.5 L760.8 220.5 L763.4 220.5 L766 220.5 L768.7 220.5 L771.3 220.5 L773.9 220.5 L776.5 220.5 L779.2 220.5 L781.8 220.5 L784.4 219 L787.1 217.5 L789.7 219 L792.3 220.5 L794.9 216.1 L797.6 219 L800.2 220.5 L802.8 220.5 L805.5 214.6 L808.1 219 L810.7 216.1 L813.3 217.5 L816 220.5 L818.6 220.5 L821.2 220.5 L823.8 220.5 L826.5 220.5 L829.1 220.5 L831.7 220.5 L834.4 220.5 L837 220.5 L839.6 220.5 L842.2 220.5 L844.9 220.5 L847.5 210.1 L850.1 220.5 L852.7 220.5 L855.4 199.8 L858 185" pathLength="1" fill="none" stroke="#249B72" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<circle class="endpt" cx="858" cy="185" r="2.6" fill="#F4C84A"/>
+<line x1="598" y1="232.5" x2="858" y2="232.5" stroke="#E8E2C9" stroke-opacity="0.08"/>
+<text x="598" y="247.5" font-size="10.5" letter-spacing="1" fill="#E8E2C9" fill-opacity="0.55">REVIEWS</text>
+<text class="num" x="598" y="280" font-size="28" font-weight="700" fill="#E8E2C9">0</text>
+<path class="spark" d="M724 280 L726.6 280 L729.3 280 L731.9 280 L734.5 280 L737.1 280 L739.8 280 L742.4 280 L745 280 L747.6 280 L750.3 280 L752.9 280 L755.5 280 L758.2 280 L760.8 280 L763.4 280 L766 280 L768.7 280 L771.3 280 L773.9 280 L776.5 280 L779.2 280 L781.8 280 L784.4 280 L787.1 280 L789.7 280 L792.3 280 L794.9 280 L797.6 280 L800.2 280 L802.8 280 L805.5 280 L808.1 280 L810.7 280 L813.3 280 L816 280 L818.6 280 L821.2 280 L823.8 280 L826.5 280 L829.1 280 L831.7 280 L834.4 280 L837 280 L839.6 280 L842.2 280 L844.9 280 L847.5 280 L850.1 280 L852.7 280 L855.4 280 L858 280" pathLength="1" fill="none" stroke="#249B72" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<circle class="endpt" cx="858" cy="280" r="2.6" fill="#F4C84A"/>
+<line x1="598" y1="292" x2="858" y2="292" stroke="#E8E2C9" stroke-opacity="0.08"/>
+<text x="598" y="314" font-size="10" letter-spacing="1" fill="#E8E2C9" fill-opacity="0.55">REPOS</text>
+<text class="num" x="598" y="338" font-size="20" font-weight="700" fill="#249B72">10</text>
+<text x="684.7" y="314" font-size="10" letter-spacing="1" fill="#E8E2C9" fill-opacity="0.55">STARS</text>
+<text class="num" x="684.7" y="338" font-size="20" font-weight="700" fill="#249B72">0</text>
+<text x="771.3" y="314" font-size="10" letter-spacing="1" fill="#E8E2C9" fill-opacity="0.55">FORKS</text>
+<text class="num" x="771.3" y="338" font-size="20" font-weight="700" fill="#249B72">0</text>
+<line x1="22" y1="362" x2="858" y2="362" stroke="#E8E2C9" stroke-opacity="0.08"/>
+<circle cx="25" cy="378.5" r="1.5" fill="#E8E2C9" fill-opacity="0.5"/>
+<text x="36" y="382" font-size="10" fill="#E8E2C9" fill-opacity="0.5">Language color and real share of code</text>
+<rect x="22" y="391.3" width="10" height="10" rx="2" fill="#18dc9b"/>
+<text x="36" y="400.3" font-size="11.5" fill="#E8E2C9">Python 93.0%</text>
+<rect x="182" y="391.3" width="10" height="10" rx="2" fill="#18dc1e"/>
+<text x="196" y="400.3" font-size="11.5" fill="#E8E2C9">C++ 3.3%</text>
+<rect x="342" y="391.3" width="10" height="10" rx="2" fill="#90dc18"/>
+<text x="356" y="400.3" font-size="11.5" fill="#E8E2C9">Go 2.9%</text>
+<rect x="502" y="391.3" width="10" height="10" rx="2" fill="#dcab18"/>
+<text x="516" y="400.3" font-size="11.5" fill="#E8E2C9">Makefile 0.8%</text>
+<circle cx="25" cy="415.2" r="1.5" fill="#E8E2C9" fill-opacity="0.5"/>
+<text x="36" y="418.7" font-size="10" fill="#E8E2C9" fill-opacity="0.5">Territory = language</text>
+<circle cx="25" cy="433.5" r="1.5" fill="#E8E2C9" fill-opacity="0.5"/>
+<text x="36" y="437" font-size="10" fill="#E8E2C9" fill-opacity="0.5">Area = bytes of code (2.5% minimum so small languages stay visible)</text>
+<circle cx="25" cy="451.8" r="1.5" fill="#E8E2C9" fill-opacity="0.5"/>
+<text x="36" y="455.3" font-size="10" fill="#E8E2C9" fill-opacity="0.5">Cell = repository in that language; multi-language repos appear in each territory</text>
+<circle cx="25" cy="470.2" r="1.5" fill="#E8E2C9" fill-opacity="0.5"/>
+<text x="36" y="473.7" font-size="10" fill="#E8E2C9" fill-opacity="0.5">Right: weekly activity; cyan dot = current week</text>
+<circle cx="443" cy="415.2" r="1.5" fill="#E8E2C9" fill-opacity="0.5"/>
+<text x="454" y="418.7" font-size="10" fill="#E8E2C9" fill-opacity="0.5">Opacity = recency of last push</text>
+<text x="622" y="418.7" font-size="10" fill="#E8E2C9" fill-opacity="0.5">oldest</text>
+<rect x="659.2" y="410.7" width="10" height="8" rx="1.5" fill="#249B72" fill-opacity="0.15"/>
+<rect x="670.2" y="410.7" width="10" height="8" rx="1.5" fill="#249B72" fill-opacity="0.25"/>
+<rect x="681.2" y="410.7" width="10" height="8" rx="1.5" fill="#249B72" fill-opacity="0.35"/>
+<rect x="692.2" y="410.7" width="10" height="8" rx="1.5" fill="#249B72" fill-opacity="0.45"/>
+<rect x="703.2" y="410.7" width="10" height="8" rx="1.5" fill="#249B72" fill-opacity="0.55"/>
+<text x="717.2" y="418.7" font-size="10" fill="#E8E2C9" fill-opacity="0.5">newest</text>
+<circle class="pulse" cx="443" cy="433.5" r="2.6" fill="#F4C84A"/>
+<text x="454" y="437" font-size="10" fill="#E8E2C9" fill-opacity="0.5">Pulsing cyan dot = push in the last 90 days</text>
+<circle cx="443" cy="470.2" r="1.5" fill="#E8E2C9" fill-opacity="0.4"/>
+<text x="454" y="473.7" font-size="10" fill="#E8E2C9" fill-opacity="0.5">White dot = no recent activity</text>
+</svg>

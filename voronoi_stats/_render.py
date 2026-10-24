@@ -1,13 +1,3 @@
-"""Draw a StatsReport as one SVG card.
-
-`render_svg(report, theme)` returns the SVG text. All positions come from
-constants.py, all texts from LABELS, all colors from the theme. The geometry
-(polygons) comes from geometry.py.
-
-Everything is deterministic: no dates, no random numbers, and numbers are always
-written with the same format, so the same report gives the same bytes.
-"""
-
 from __future__ import annotations
 
 import colorsys
