@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import date
 from typing import NamedTuple
 
-from ._constants import (
+from voronoi_stats._constants import (
     ACTIVITY_KEYS,
     MAX_LANGUAGES,
     MIN_AREA_SHARE,
@@ -11,7 +11,7 @@ from ._constants import (
     OPACITY_MIN,
     OTHER_LABEL,
 )
-from ._github import GitHubData, Repository, WeeklyActivity
+from voronoi_stats._github import GitHubData, Repository, WeeklyActivity
 
 
 # ── Report types (the only input of the renderer) ───────────────────────────

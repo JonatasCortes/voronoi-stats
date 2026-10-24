@@ -122,7 +122,7 @@ jobs:
       - name: Generate svg card
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: python voronoi-stats/main.py "$USERNAME" --theme "$THEME"
+        run: python -m voronoi_stats "$USERNAME" --theme "$THEME"
 
       - name: Save to repository if changed
         run: |
@@ -211,15 +211,8 @@ Set the `width` value that best suits your README, then **commit and push** the 
 You can also generate the card locally, from the root of your profile repository:
 
 ```bash
-# macOS / Linux
 export GH_TOKEN="your_token_here"
-python voronoi-stats/main.py YourGitHubUserName --theme cyberpunk
-```
-
-```powershell
-# Windows (PowerShell)
-$env:GH_TOKEN="your_token_here"
-python voronoi-stats/main.py YourGitHubUserName --theme cyberpunk
+python -m voronoi_stats YourGithubUser --theme ThemeName
 ```
 
 The file is saved to `assets/stats.svg`.
@@ -357,11 +350,15 @@ Available themes: [`red`](#red) · [`orange`](#orange) · [`yellow`](#yellow) ·
 ### 2. Light Colors (Pastels)
 
 Beautifully tinted light backgrounds for a clean and fresh look. 
-Available themes: [`mint`](#mint) · [`lavender`](#lavender) · [`peach`](#peach) · [`sky`](#sky)
+Available themes: [`mint`](#mint) · [`chocomint`](#choco-mint) · [`lavender`](#lavender) · [`peach`](#peach) · [`sky`](#sky)
 
 #### Mint
 `--theme mint`
 <p align="center"><img src="assets/stats_mint.svg" alt="Code Territory card, mint theme" width="800"></p>
+
+#### Choco Mint
+`--theme mint`
+<p align="center"><img src="assets/stats_chocomint.svg" alt="Code Territory card, choco mint theme" width="800"></p>
 
 #### Lavender
 `--theme lavender`
@@ -407,7 +404,7 @@ Available themes: [`spring`](#spring) · [`summer`](#summer) · [`autumn`](#autu
 ### 4. Drinks
 
 Warm tones and aesthetics inspired by classic beverages. 
-Available themes: [`wine`](#wine) · [`beer`](#beer) · [`coffee`](#coffee) · [`matcha`](#matcha)
+Available themes: [`wine`](#wine) · [`beer`](#beer) · [`coffee`](#coffee) · [`matcha`](#matcha) · [`berrymatcha`](#berry-matcha) · [`latte`](#latte)
 
 #### Wine
 `--theme wine`
@@ -425,6 +422,14 @@ Available themes: [`wine`](#wine) · [`beer`](#beer) · [`coffee`](#coffee) · [
 `--theme matcha`
 <p align="center"><img src="assets/stats_matcha.svg" alt="Code Territory card, matcha theme" width="800"></p>
 
+#### Berry Matcha
+`--theme berrymatcha`
+<p align="center"><img src="assets/stats_berrymatcha.svg" alt="Code Territory card, berry matcha theme" width="800"></p>
+
+#### Latte
+`--theme latte`
+<p align="center"><img src="assets/stats_latte.svg" alt="Code Territory card, latte theme" width="800"></p>
+
 <p align="right"><a href="#themes">⬆ back to themes</a></p>
 
 ---
@@ -432,7 +437,7 @@ Available themes: [`wine`](#wine) · [`beer`](#beer) · [`coffee`](#coffee) · [
 ### 5. Countries & Geography
 
 Colors inspired by flags and cultural landmarks. 
-Available themes: [`brazil`](#brazil) · [`usa`](#usa) · [`france`](#france) · [`japan_dark`](#japan_dark) · [`japan_light`](#japan_light) · [`india`](#india) · [`mexico`](#mexico) · [`greece`](#greece) · [`egypt`](#egypt)
+Available themes: [`brazil`](#brazil) · [`usa`](#usa) · [`miami`](#miami) · [`france`](#france) · [`japan_dark`](#japan_dark) · [`japan_light`](#japan_light) · [`india`](#india) · [`mexico`](#mexico) · [`fiesta`](#fiesta) · [`greece`](#greece) · [`egypt`](#egypt)
 
 #### Brazil
 `--theme brazil`
@@ -441,6 +446,10 @@ Available themes: [`brazil`](#brazil) · [`usa`](#usa) · [`france`](#france) ·
 #### USA
 `--theme usa`
 <p align="center"><img src="assets/stats_usa.svg" alt="Code Territory card, usa theme" width="800"></p>
+
+#### MIAMI
+`--theme miami`
+<p align="center"><img src="assets/stats_miami.svg" alt="Code Territory card, miami theme" width="800"></p>
 
 #### France
 `--theme france`
@@ -461,6 +470,10 @@ Available themes: [`brazil`](#brazil) · [`usa`](#usa) · [`france`](#france) ·
 #### Mexico
 `--theme mexico`
 <p align="center"><img src="assets/stats_mexico.svg" alt="Code Territory card, mexico theme" width="800"></p>
+
+#### Fiesta
+`--theme fiesta`
+<p align="center"><img src="assets/stats_fiesta.svg" alt="Code Territory card, fiesta theme" width="800"></p>
 
 #### Greece
 `--theme greece`
@@ -506,7 +519,7 @@ Available themes: [`cyberpunk`](#cyberpunk) · [`steampunk`](#steampunk) · [`sy
 ### 7. Classical UI (Dev Themes)
 
 Beloved themes from your favorite code editors and IDEs. 
-Available themes: [`dracula`](#dracula) · [`mocha`](#mocha) · [`latte`](#latte) · [`nord`](#nord) · [`solarized_dark`](#solarized_dark) · [`solarized_light`](#solarized_light)
+Available themes: [`dracula`](#dracula) · [`mocha`](#mocha) · [`nord`](#nord) · [`solarized_dark`](#solarized_dark) · [`solarized_light`](#solarized_light)
 
 #### Dracula
 `--theme dracula`
@@ -515,10 +528,6 @@ Available themes: [`dracula`](#dracula) · [`mocha`](#mocha) · [`latte`](#latte
 #### Mocha
 `--theme mocha`
 <p align="center"><img src="assets/stats_mocha.svg" alt="Code Territory card, mocha theme" width="800"></p>
-
-#### Latte
-`--theme latte`
-<p align="center"><img src="assets/stats_latte.svg" alt="Code Territory card, latte theme" width="800"></p>
 
 #### Nord
 `--theme nord`

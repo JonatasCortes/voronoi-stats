@@ -2,14 +2,14 @@ from __future__ import annotations
 import hashlib
 import math
 from typing import Final, NamedTuple
-from ._constants import (
+from voronoi_stats._constants import (
     DOMINANT_SHARE,
     POWER_MAX_ITER,
     POWER_STEP,
     POWER_TOLERANCE,
     SEED_MARGIN,
 )
-from ._stats import LanguageShare, RepoCell, StatsReport
+from voronoi_stats._stats import LanguageShare, RepoCell, StatsReport
 
 Point = tuple[float, float]
 Polygon = list[Point]

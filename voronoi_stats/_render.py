@@ -14,7 +14,7 @@ import colorsys
 from string import Template
 from xml.sax.saxutils import escape
 
-from ._constants import (
+from voronoi_stats._constants import (
     ACTIVITY_ROW_COUNT,
     ACTIVITY_W,
     ACTIVITY_X,
@@ -85,9 +85,9 @@ from ._constants import (
     TITLE_BASELINE,
     TITLE_X_OFFSET,
 )
-from ._geometry import Bounds, CellShape, Point, TerritoryMap, build_territory_map
-from ._stats import ActivityMetric, LanguageShare, StatsReport, Totals
-from ._themes import Theme
+from voronoi_stats._geometry import Bounds, CellShape, Point, TerritoryMap, build_territory_map
+from voronoi_stats._stats import ActivityMetric, LanguageShare, StatsReport, Totals
+from voronoi_stats._themes import Theme
 
 
 # ── Number and text formatting ──────────────────────────────────────────────

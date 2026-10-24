@@ -5,11 +5,11 @@ import sys
 from datetime import date, datetime, timezone
 from pathlib import Path
 
-from ._constants import OUTPUT_PATH
-from ._github import GitHubApiError, GitHubData, fetch_github_data, read_token
-from ._render import render_svg
-from ._stats import StatsReport, build_report
-from ._themes import Theme, get_theme
+from voronoi_stats._constants import OUTPUT_PATH
+from voronoi_stats._github import GitHubApiError, GitHubData, fetch_github_data, read_token
+from voronoi_stats._render import render_svg
+from voronoi_stats._stats import StatsReport, build_report
+from voronoi_stats._themes import Theme, get_theme
 
 
 def write_svg(svg: str, path: str = OUTPUT_PATH) -> None:
