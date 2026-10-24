@@ -177,7 +177,7 @@ With the token copied:
 
 1. Go to your profile repository on GitHub and open **Settings → Secrets and variables → Actions**.
 2. Click **New repository secret**.
-3. In **Name**, type exactly `CONTRIB_TOKEN`.
+3. In **Name**, type exactly `GH_TOKEN`.
 4. In **Secret**, paste the token you just created.
 5. Click **Add secret**.
 
@@ -561,8 +561,8 @@ Available themes: [`heaven`](#heaven) · [`hell`](#hell) · [`abyss`](#abyss)
 
 | Problem | What to check |
 | --- | --- |
-| **The workflow fails with "GitHub rejected the token"** | The token is wrong, expired or was revoked. Create a new one ([Step 4](#step-4-create-the-access-token)) and update the `CONTRIB_TOKEN` secret. |
-| **"Environment variable GH_TOKEN is empty or missing"** | The secret is not named exactly `CONTRIB_TOKEN`, or the workflow does not pass it as `GH_TOKEN`. |
+| **The workflow fails with "GitHub rejected the token"** | The token is wrong, expired or was revoked. Create a new one ([Step 4](#step-4-create-the-access-token)) and update the `GH_TOKEN` secret. |
+| **"Environment variable GH_TOKEN is empty or missing"** | The secret is not named exactly `GH_TOKEN`, or the workflow does not pass it as `GH_TOKEN`. |
 | **"GitHub user not found"** | The username is wrong. In a profile repository, `USERNAME` must be the account that owns it. |
 | **"Theme ... not found"** | The `THEME` name does not exist. The error message lists every available theme. |
 | **The workflow cannot push the SVG** | Open **Settings → Actions → General → Workflow permissions** and allow **Read and write permissions**. |
