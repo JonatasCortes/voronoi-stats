@@ -204,14 +204,14 @@ THEMES: Final[dict[str, Theme]] = {
         "legend_title": "#EF4135", "legend_text": "#F1F5F9",
         "hue_start": 370.0, "hue_end": 210.0, "saturation": 0.70, "lightness": 0.55,
     },
-    "japan_dark": {
+    "japandark": {
         "background": "#000000", "plot_background": "#0A0A0A", "text": "#FFFFFF",
         "accent": "#E60033", "pulse": "#FFFFFF",
         "border_start": "#BC002D", "border_end": "#333333",
         "legend_title": "#E60033", "legend_text": "#FFFFFF",
         "hue_start": 315.0, "hue_end": 395.0, "saturation": 0.90, "lightness": 0.45,
     },
-    "japan_light": {
+    "japanlight": {
         "background": "#FCFAF5", "plot_background": "#F4F0E6", "text": "#1A1A1A",
         "accent": "#BC002D", "pulse": "#E60033",
         "border_start": "#990022", "border_end": "#D6CFC1",
