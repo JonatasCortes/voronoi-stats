@@ -2,7 +2,7 @@ from types import MappingProxyType
 from typing import Final, Mapping
 
 # ── Output / API ────────────────────────────────────────────────────────────
-OUTPUT_PATH: Final[str] = "assets/stats.svg"
+OUTPUT_PATH: Final[str] = "assets/stats_{theme}.svg"
 GH_TOKEN: Final[str] = "GH_TOKEN"
 GRAPHQL_URL: Final[str] = "https://api.github.com/graphql"
 REPOS_PAGE_SIZE: Final[int] = 50      # repositories per GraphQL page

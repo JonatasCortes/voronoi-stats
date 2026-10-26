@@ -1,20 +1,10 @@
-"""Draw a StatsReport as one SVG card.
-
-`render_svg(report, theme)` returns the SVG text. All positions come from
-constants.py, all texts from LABELS, all colors from the theme. The geometry
-(polygons) comes from geometry.py.
-
-Everything is deterministic: no dates, no random numbers, and numbers are always
-written with the same format, so the same report gives the same bytes.
-"""
-
 from __future__ import annotations
 
 import colorsys
 from string import Template
 from xml.sax.saxutils import escape
 
-from voronoi_stats._constants import (
+from voronoi_stats.constants import (
     ACTIVITY_ROW_COUNT,
     ACTIVITY_W,
     ACTIVITY_X,
@@ -85,9 +75,9 @@ from voronoi_stats._constants import (
     TITLE_BASELINE,
     TITLE_X_OFFSET,
 )
-from voronoi_stats._geometry import Bounds, CellShape, Point, TerritoryMap, build_territory_map
-from voronoi_stats._stats import ActivityMetric, LanguageShare, StatsReport, Totals
-from voronoi_stats._themes import Theme
+from voronoi_stats.geometry import Bounds, CellShape, Point, TerritoryMap, build_territory_map
+from voronoi_stats.stats import ActivityMetric, LanguageShare, StatsReport, Totals
+from voronoi_stats.themes import Theme
 
 
 # ── Number and text formatting ──────────────────────────────────────────────

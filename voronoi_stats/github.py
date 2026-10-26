@@ -7,7 +7,7 @@ import urllib.request
 from datetime import date, datetime, time, timedelta, timezone
 from typing import Final, NamedTuple, NoReturn, cast
 
-from voronoi_stats._constants import GRAPHQL_URL, LANGS_PER_REPO, REPOS_PAGE_SIZE, GH_TOKEN, WEEKS
+from voronoi_stats.constants import GRAPHQL_URL, LANGS_PER_REPO, REPOS_PAGE_SIZE, GH_TOKEN, WEEKS
 
 JsonObject = dict[str, object]
 

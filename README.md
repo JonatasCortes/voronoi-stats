@@ -11,7 +11,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/python-3.12-3776AB?logo=python&logoColor=white" alt="Python 3.12">
   <img src="https://img.shields.io/badge/GitHub_Actions-automated-2088FF?logo=githubactions&logoColor=white" alt="GitHub Actions">
-  <img src="https://img.shields.io/badge/themes-42-ff0055" alt="42 themes">
+  <img src="https://img.shields.io/badge/themes-50-ff0055" alt="50 themes">
   <img src="https://img.shields.io/badge/dependencies-none-2ea44f" alt="No dependencies">
   <img src="https://img.shields.io/badge/output-SVG-FFB13B?logo=svg&logoColor=white" alt="SVG output">
 </p>
@@ -208,10 +208,9 @@ Set the `width` value that best suits your README, then **commit and push** the 
 
 ### Optional: run it on your computer
 
-You can also generate the card locally, from the root of your profile repository:
+With the `GH_TOKEN` variable defined in your terminal, you can also generate the card locally, from the root of your profile repository:
 
 ```bash
-export GH_TOKEN="your_token_here"
 python -m voronoi_stats YourGithubUser --theme ThemeName
 ```
 
@@ -313,7 +312,7 @@ Jump straight to a category:
 ### 1. Dark Colors
 
 Simple, bold, and deep classic colors. 
-Available themes: [`red`](#red) · [`orange`](#orange) · [`yellow`](#yellow) · [`green`](#green) · [`blue`](#blue) · [`purple`](#purple) · [`obsidian`](#obsidian)
+Available themes: [`red`](#red) · [`orange`](#orange) · [`yellow`](#yellow) · [`green`](#green) · [`blue`](#blue) · [`purple`](#purple) · [`pink`](#pink) · [`obsidian`](#obsidian)
 
 #### Red
 `--theme red`
@@ -338,6 +337,10 @@ Available themes: [`red`](#red) · [`orange`](#orange) · [`yellow`](#yellow) ·
 #### Purple
 `--theme purple`
 <p align="center"><img src="assets/stats_purple.svg" alt="Code Territory card, purple theme" width="800"></p>
+
+#### Pink
+`--theme pink`
+<p align="center"><img src="assets/stats_pink.svg" alt="Code Territory card, pink theme" width="800"></p>
 
 #### Obsidian
 `--theme obsidian`
@@ -437,7 +440,7 @@ Available themes: [`wine`](#wine) · [`beer`](#beer) · [`coffee`](#coffee) · [
 ### 5. Countries & Geography
 
 Colors inspired by flags and cultural landmarks. 
-Available themes: [`brazil`](#brazil) · [`usa`](#usa) · [`miami`](#miami) · [`france`](#france) · [`japan_dark`](#japan_dark) · [`japan_light`](#japan_light) · [`india`](#india) · [`mexico`](#mexico) · [`fiesta`](#fiesta) · [`greece`](#greece) · [`egypt`](#egypt)
+Available themes: [`brazil`](#brazil) · [`usa`](#usa) · [`miami`](#miami) · [`france`](#france) · [`japan_dark`](#japan_dark) · [`japan_light`](#japan_light) · [`sakura`](#sakura) · [`india`](#india) · [`china`](#china) · [`mexico`](#mexico) · [`fiesta`](#fiesta) · [`greece`](#greece) · [`egypt`](#egypt)
 
 #### Brazil
 `--theme brazil`
@@ -463,9 +466,17 @@ Available themes: [`brazil`](#brazil) · [`usa`](#usa) · [`miami`](#miami) · [
 `--theme japan_light`
 <p align="center"><img src="assets/stats_japan_light.svg" alt="Code Territory card, japan_light theme" width="800"></p>
 
+#### Sakura
+`--theme sakura`
+<p align="center"><img src="assets/stats_sakura.svg" alt="Code Territory card, sakura theme" width="800"></p>
+
 #### India
 `--theme india`
 <p align="center"><img src="assets/stats_india.svg" alt="Code Territory card, india theme" width="800"></p>
+
+#### China
+`--theme china`
+<p align="center"><img src="assets/stats_china.svg" alt="Code Territory card, china theme" width="800"></p>
 
 #### Mexico
 `--theme mexico`
@@ -490,7 +501,7 @@ Available themes: [`brazil`](#brazil) · [`usa`](#usa) · [`miami`](#miami) · [
 ### 6. Aesthetics & Culture
 
 Highly stylized themes based on internet cultures and artistic movements. 
-Available themes: [`cyberpunk`](#cyberpunk) · [`steampunk`](#steampunk) · [`synthwave`](#synthwave) · [`lofi`](#lofi)
+Available themes: [`neon`](#neon) · [`cyberpunk`](#cyberpunk) · [`steampunk`](#steampunk) · [`synthwave`](#synthwave) · [`lofi`](#lofi)
 
 #### Neon
 `--theme neon`
@@ -519,7 +530,7 @@ Available themes: [`cyberpunk`](#cyberpunk) · [`steampunk`](#steampunk) · [`sy
 ### 7. Classical UI (Dev Themes)
 
 Beloved themes from your favorite code editors and IDEs. 
-Available themes: [`dracula`](#dracula) · [`mocha`](#mocha) · [`nord`](#nord) · [`solarized_dark`](#solarized_dark) · [`solarized_light`](#solarized_light)
+Available themes: [`dracula`](#dracula) · [`mocha`](#mocha) · [`nord`](#nord) · [`solarized_dark`](#solarized_dark) · [`solarized_light`](#solarized_light) · [`atlas`](#atlas)
 
 #### Dracula
 `--theme dracula`
@@ -540,6 +551,10 @@ Available themes: [`dracula`](#dracula) · [`mocha`](#mocha) · [`nord`](#nord) 
 #### Solarized Light
 `--theme solarized_light`
 <p align="center"><img src="assets/stats_solarized_light.svg" alt="Code Territory card, solarized_light theme" width="800"></p>
+
+#### Atlas
+`--theme atlas`
+<p align="center"><img src="assets/stats_atlas.svg" alt="Code Territory card, atlas theme" width="800"></p>
 
 <p align="right"><a href="#themes">⬆ back to themes</a></p>
 
