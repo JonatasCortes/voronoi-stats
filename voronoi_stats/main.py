@@ -41,16 +41,14 @@ def main() -> int:
                         help="theme name (default: neon)")
     arguments: argparse.Namespace = parser.parse_args()
     username: str = str(arguments.username)
-    theme_name: str = str(arguments.theme).replace(
-        " ", "").replace("-", "").replace("_", "")
+    theme_name: str = str(arguments.theme)
 
     try:
-        update_voronoi_stats(username, theme_name,
-                             OUTPUT_PATH.format(theme=theme_name))
+        update_voronoi_stats(username, theme_name, OUTPUT_PATH)
     except (GitHubApiError, ValueError) as error:
         print(f"voronoi-stats: {error}", file=sys.stderr)
         return 1
-    print(f"voronoi-stats: saved {OUTPUT_PATH.format(theme=theme_name)}")
+    print(f"voronoi-stats: saved {OUTPUT_PATH}")
     return 0
 
 
