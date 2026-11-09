@@ -43,11 +43,11 @@ PLOT_RADIUS: Final[int] = 10
 # Legend: one row with the languages (and the opacity scale) + one row per
 # explanation item (Area, Cell, Opacity). Every row has the same height.
 LEGEND_GAP: Final[int] = 20           # space between plot and legend
-LEGEND_ROWS: Final[int] = 4           # language row + 3 explanation items
+LEGEND_ROWS: Final[int] = 5           # language row + 3 explanation items
 LEGEND_ROW_H: Final[int] = 28         # height of each legend row
 # extra space above the first row and below the last
 LEGEND_PAD_Y: Final[int] = 4
-LEGEND_H: Final[int] = LEGEND_ROWS * LEGEND_ROW_H + 2 * LEGEND_PAD_Y  # 120
+LEGEND_H: Final[int] = LEGEND_ROWS * LEGEND_ROW_H + LEGEND_PAD_Y
 LEGEND_SWATCH: Final[int] = 16        # side of the language color squares
 LEGEND_SWATCH_RADIUS: Final[float] = 3.0
 # squares of the oldest -> newest opacity scale
@@ -148,6 +148,8 @@ LABELS: Final[Mapping[str, str]] = MappingProxyType(
         "legend_region_text": "each one represents a programming language.",
         "legend_cell_title": "Cells:",
         "legend_cell_text": "each one represents a GitHub repository within a programming language.",
+        "legend_size_title": "Cell Area",
+        "legend_size_text": "proportional to the amount of code in the repository.",
         "legend_opacity_title": "Brightness:",
         "legend_opacity_text": "proportional to how recently the repository was last pushed to.",
         # Accessibility

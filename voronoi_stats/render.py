@@ -412,7 +412,7 @@ def _legend_svg(report: StatsReport, colors: dict[str, str], theme: Theme) -> li
             )
 
     # Rows 1-3: "Title: explanation" (title and explanation have their own colors)
-    for row, key in enumerate(("legend_region", "legend_cell", "legend_opacity"), start=1):
+    for row, key in enumerate(("legend_region", "legend_cell", "legend_size", "legend_opacity"), start=1):
         lines.append(
             f'<text x="{_n(left)}" y="{_n(baseline(row))}" font-size="{_t(FONT_LEGEND)}">'
             f'<tspan font-weight="700" fill="{title_color}">{escape(LABELS[key + "_title"])}</tspan>'
@@ -429,7 +429,7 @@ def _legend_svg(report: StatsReport, colors: dict[str, str], theme: Theme) -> li
     )
     scale_x: float = right - _text_width(new_label) - _SCALE_GAP - scale_w
     lines.append(
-        f'<text x="{_n(scale_x - _SCALE_GAP)}" y="{_n(baseline(3))}" font-size="{_t(FONT_LEGEND)}" '
+        f'<text x="{_n(scale_x - _SCALE_GAP)}" y="{_n(baseline(4))}" font-size="{_t(FONT_LEGEND)}" '
         f'text-anchor="end" fill="{text_color}">{escape(old_label)}</text>'
     )
     for index in range(LEGEND_SCALE_STEPS):
@@ -437,12 +437,12 @@ def _legend_svg(report: StatsReport, colors: dict[str, str], theme: Theme) -> li
             (OPACITY_MAX - OPACITY_MIN) * index / (LEGEND_SCALE_STEPS - 1)
         lines.append(
             f'<rect x="{_n(scale_x + index * (LEGEND_SWATCH + LEGEND_SCALE_GAP))}" '
-            f'y="{_n(row_center(3) - LEGEND_SWATCH / 2.0)}" width="{LEGEND_SWATCH}" '
+            f'y="{_n(row_center(4) - LEGEND_SWATCH / 2.0)}" width="{LEGEND_SWATCH}" '
             f'height="{LEGEND_SWATCH}" rx="{_t(LEGEND_SWATCH_RADIUS)}" '
             f'fill="{theme["accent"]}" fill-opacity="{_t(opacity)}"/>'
         )
     lines.append(
-        f'<text x="{_n(right)}" y="{_n(baseline(3))}" font-size="{_t(FONT_LEGEND)}" '
+        f'<text x="{_n(right)}" y="{_n(baseline(4))}" font-size="{_t(FONT_LEGEND)}" '
         f'text-anchor="end" fill="{text_color}">{escape(new_label)}</text>'
     )
     return lines
