@@ -144,18 +144,18 @@ LABELS: Final[Mapping[str, str]] = MappingProxyType(
         "legend_opacity_old": "oldest",
         "legend_opacity_new": "newest",
         # Legend: explanation items
-        "legend_region_title": "Region:",
-        "legend_region_text": "each one represents a language",
-        "legend_cell_title": "Cell:",
-        "legend_cell_text": "each one represents a repository associated with a programming language.",
-        "legend_opacity_title": "Opacity:",
-        "legend_opacity_text": "proportional to how recently the repository was last pushed to (compared to the others)",
+        "legend_region_title": "Colors:",
+        "legend_region_text": "each one represents a programming language.",
+        "legend_cell_title": "Cells:",
+        "legend_cell_text": "each one represents a GitHub repository within a programming language.",
+        "legend_opacity_title": "Brightness:",
+        "legend_opacity_text": "proportional to how recently the repository was last pushed to.",
         # Accessibility
         "svg_title": "GitHub Stats",
         "svg_desc": (
             "Weighted Voronoi map of {user}'s repositories: each territory is a language "
             "and each cell is a repository, with area proportional to the amount of code. "
-            "Opacity shows how recent the last push was. On the right, weekly activity "
+            "Brightness shows how recent the last push was. On the right, weekly activity "
             "for the last 12 months."
         ),
     }
