@@ -1,13 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="880" height="516" viewBox="0 0 880 516" font-family="Arial,Helvetica,sans-serif" role="img" aria-labelledby="svg-title svg-desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="540" viewBox="0 0 880 540" font-family="Arial,Helvetica,sans-serif" role="img" aria-labelledby="svg-title svg-desc">
 <title id="svg-title">GitHub Stats</title>
 <desc id="svg-desc">Weighted Voronoi map of JonatasCortes's repositories: each territory is a language and each cell is a repository, with area proportional to the amount of code. Brightness shows how recent the last push was. On the right, weekly activity for the last 12 months.</desc>
 <style>.cell{animation:cell-in 0.9s ease-out both}.terr{animation:fade-in 1s ease-out 1.6s both}.spark{stroke-dasharray:1;stroke-dashoffset:0;animation:draw 1.8s ease-out 0.5s both}.num{animation:fade-in 0.8s ease-out 0.4s both}.endpt{animation:fade-in 0.8s ease-out 2.3s both}.pulse{animation:pulse 6s ease-in-out 2.4s infinite}@keyframes cell-in{from{opacity:0;transform:scale(0.55)}to{opacity:1;transform:scale(1)}}@keyframes fade-in{from{opacity:0}to{opacity:1}}@keyframes draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}@media (prefers-reduced-motion:reduce){.cell,.terr,.spark,.num,.endpt,.pulse{animation:none}}</style>
-<defs><linearGradient id="border" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF6B35"/><stop offset="1" stop-color="#00B4D8"/></linearGradient><radialGradient id="glow"><stop offset="0" stop-color="#FF9F1C" stop-opacity="0.16"/><stop offset="1" stop-color="#FF9F1C" stop-opacity="0"/></radialGradient><clipPath id="card-clip"><rect x="1" y="1" width="878" height="514" rx="15"/></clipPath><clipPath id="plot-clip"><rect x="22" y="54" width="550" height="300" rx="10"/></clipPath></defs>
-<rect x="1" y="1" width="878" height="514" rx="15" fill="#FFF8E1" stroke="url(#border)" stroke-width="2"/>
-<ellipse cx="440" cy="258" rx="380" ry="200" fill="url(#glow)" clip-path="url(#card-clip)"/>
-<rect x="22" y="22" width="4" height="22" rx="2" fill="#FF9F1C"/>
-<text x="37" y="39" font-size="18" font-weight="700" letter-spacing="1" fill="#FF9F1C">GITHUB STATS</text>
-<text x="598" y="39" font-size="12" letter-spacing="1" fill="#00B4D8">ACTIVITY · 12 MONTHS</text>
+<defs><linearGradient id="border" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF6B35"/><stop offset="1" stop-color="#00B4D8"/></linearGradient><radialGradient id="glow"><stop offset="0" stop-color="#C2410C" stop-opacity="0.16"/><stop offset="1" stop-color="#C2410C" stop-opacity="0"/></radialGradient><clipPath id="card-clip"><rect x="1" y="1" width="878" height="538" rx="15"/></clipPath><clipPath id="plot-clip"><rect x="22" y="54" width="550" height="300" rx="10"/></clipPath></defs>
+<rect x="1" y="1" width="878" height="538" rx="15" fill="#FFF8E1" stroke="url(#border)" stroke-width="2"/>
+<ellipse cx="440" cy="270" rx="380" ry="200" fill="url(#glow)" clip-path="url(#card-clip)"/>
+<rect x="22" y="22" width="4" height="22" rx="2" fill="#C2410C"/>
+<text x="37" y="39" font-size="18" font-weight="700" letter-spacing="1" fill="#C2410C">GITHUB STATS</text>
+<text x="598" y="39" font-size="12" letter-spacing="1" fill="#D9480F">ACTIVITY · 12 MONTHS</text>
 <rect x="22" y="54" width="550" height="300" rx="10" fill="#FFEFC2"/>
 <g clip-path="url(#plot-clip)">
 <polygon class="cell" points="22,246.4 22,234.7 122.2,134.3 313.8,178.5 338.2,212.6 320.9,354 62.8,354" fill="#f0a742" fill-opacity="0.55" stroke="#FFF8E1" stroke-width="1.4" stroke-linejoin="round" style="transform-origin:184.5px 256.2px;animation-delay:0.15s"/>
@@ -42,52 +42,53 @@
 <polygon points="489.1,297.5 572,328.8 572,354 461.5,354" fill="none" stroke="#42d3f0" stroke-width="1.2" stroke-opacity="0.9" stroke-linejoin="round"/>
 </g>
 </g>
-<rect x="22" y="54" width="550" height="300" rx="10" fill="none" stroke="#FF9F1C" stroke-opacity="0.28"/>
+<rect x="22" y="54" width="550" height="300" rx="10" fill="none" stroke="#C2410C" stroke-opacity="0.28"/>
 <text x="598" y="69" font-size="10.5" letter-spacing="1" fill="#9A3412" fill-opacity="0.55">COMMITS</text>
 <text class="num" x="598" y="101.5" font-size="28" font-weight="700" fill="#9A3412">779</text>
-<path class="spark" d="M724 100.7 L726.6 95.6 L729.3 82.5 L731.9 100.2 L734.5 101.5 L737.1 101.5 L739.8 101.5 L742.4 101.5 L745 101.5 L747.6 101.5 L750.3 101.5 L752.9 101.1 L755.5 99 L758.2 99.8 L760.8 101.5 L763.4 101.5 L766 101.5 L768.7 101.5 L771.3 101.5 L773.9 101.5 L776.5 98.1 L779.2 96.9 L781.8 98.5 L784.4 98.5 L787.1 85 L789.7 82.9 L792.3 76.1 L794.9 89.2 L797.6 94.3 L800.2 85.4 L802.8 90.5 L805.5 88.8 L808.1 66 L810.7 88.4 L813.3 100.2 L816 99.4 L818.6 101.5 L821.2 97.7 L823.8 100.2 L826.5 100.7 L829.1 100.2 L831.7 99.8 L834.4 101.5 L837 98.1 L839.6 101.1 L842.2 88 L844.9 98.1 L847.5 99.4 L850.1 85.4 L852.7 76.6 L855.4 73.2 L858 90.5" pathLength="1" fill="none" stroke="#FF9F1C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-<g class="endpt"><circle class="pulse" cx="858" cy="90.5" r="2.6" fill="#00B4D8"/></g>
+<path class="spark" d="M724 100.7 L726.6 95.6 L729.3 82.5 L731.9 100.2 L734.5 101.5 L737.1 101.5 L739.8 101.5 L742.4 101.5 L745 101.5 L747.6 101.5 L750.3 101.5 L752.9 101.1 L755.5 99 L758.2 99.8 L760.8 101.5 L763.4 101.5 L766 101.5 L768.7 101.5 L771.3 101.5 L773.9 101.5 L776.5 98.1 L779.2 96.9 L781.8 98.5 L784.4 98.5 L787.1 85 L789.7 82.9 L792.3 76.1 L794.9 89.2 L797.6 94.3 L800.2 85.4 L802.8 90.5 L805.5 88.8 L808.1 66 L810.7 88.4 L813.3 100.2 L816 99.4 L818.6 101.5 L821.2 97.7 L823.8 100.2 L826.5 100.7 L829.1 100.2 L831.7 99.8 L834.4 101.5 L837 98.1 L839.6 101.1 L842.2 88 L844.9 98.1 L847.5 99.4 L850.1 85.4 L852.7 76.6 L855.4 73.2 L858 90.5" pathLength="1" fill="none" stroke="#C2410C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<g class="endpt"><circle class="pulse" cx="858" cy="90.5" r="2.6" fill="#D9480F"/></g>
 <line x1="598" y1="113.5" x2="858" y2="113.5" stroke="#9A3412" stroke-opacity="0.08"/>
 <text x="598" y="128.5" font-size="10.5" letter-spacing="1" fill="#9A3412" fill-opacity="0.55">PULL REQUESTS</text>
 <text class="num" x="598" y="161" font-size="28" font-weight="700" fill="#9A3412">108</text>
-<path class="spark" d="M724 158.5 L726.6 150.9 L729.3 138.2 L731.9 153.4 L734.5 148.3 L737.1 161 L739.8 161 L742.4 161 L745 161 L747.6 161 L750.3 161 L752.9 161 L755.5 161 L758.2 161 L760.8 161 L763.4 161 L766 161 L768.7 161 L771.3 161 L773.9 161 L776.5 161 L779.2 158.5 L781.8 150.9 L784.4 150.9 L787.1 143.2 L789.7 153.4 L792.3 145.8 L794.9 148.3 L797.6 155.9 L800.2 155.9 L802.8 153.4 L805.5 145.8 L808.1 125.5 L810.7 130.6 L813.3 161 L816 158.5 L818.6 161 L821.2 161 L823.8 161 L826.5 161 L829.1 161 L831.7 158.5 L834.4 161 L837 161 L839.6 161 L842.2 148.3 L844.9 158.5 L847.5 158.5 L850.1 161 L852.7 155.9 L855.4 150.9 L858 155.9" pathLength="1" fill="none" stroke="#FF9F1C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-<g class="endpt"><circle class="pulse" cx="858" cy="155.9" r="2.6" fill="#00B4D8"/></g>
+<path class="spark" d="M724 158.5 L726.6 150.9 L729.3 138.2 L731.9 153.4 L734.5 148.3 L737.1 161 L739.8 161 L742.4 161 L745 161 L747.6 161 L750.3 161 L752.9 161 L755.5 161 L758.2 161 L760.8 161 L763.4 161 L766 161 L768.7 161 L771.3 161 L773.9 161 L776.5 161 L779.2 158.5 L781.8 150.9 L784.4 150.9 L787.1 143.2 L789.7 153.4 L792.3 145.8 L794.9 148.3 L797.6 155.9 L800.2 155.9 L802.8 153.4 L805.5 145.8 L808.1 125.5 L810.7 130.6 L813.3 161 L816 158.5 L818.6 161 L821.2 161 L823.8 161 L826.5 161 L829.1 161 L831.7 158.5 L834.4 161 L837 161 L839.6 161 L842.2 148.3 L844.9 158.5 L847.5 158.5 L850.1 161 L852.7 155.9 L855.4 150.9 L858 155.9" pathLength="1" fill="none" stroke="#C2410C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<g class="endpt"><circle class="pulse" cx="858" cy="155.9" r="2.6" fill="#D9480F"/></g>
 <line x1="598" y1="173" x2="858" y2="173" stroke="#9A3412" stroke-opacity="0.08"/>
 <text x="598" y="188" font-size="10.5" letter-spacing="1" fill="#9A3412" fill-opacity="0.55">ISSUES</text>
 <text class="num" x="598" y="220.5" font-size="28" font-weight="700" fill="#9A3412">73</text>
-<path class="spark" d="M724 220.5 L726.6 220.5 L729.3 220.5 L731.9 220.5 L734.5 220.5 L737.1 220.5 L739.8 220.5 L742.4 220.5 L745 220.5 L747.6 220.5 L750.3 220.5 L752.9 220.5 L755.5 220.5 L758.2 220.5 L760.8 220.5 L763.4 220.5 L766 220.5 L768.7 220.5 L771.3 220.5 L773.9 220.5 L776.5 219 L779.2 216.1 L781.8 220.5 L784.4 219 L787.1 216.1 L789.7 220.5 L792.3 219 L794.9 220.5 L797.6 219 L800.2 213.1 L802.8 217.5 L805.5 214.6 L808.1 217.5 L810.7 220.5 L813.3 220.5 L816 220.5 L818.6 220.5 L821.2 220.5 L823.8 220.5 L826.5 220.5 L829.1 220.5 L831.7 220.5 L834.4 220.5 L837 220.5 L839.6 213.1 L842.2 210.1 L844.9 220.5 L847.5 220.5 L850.1 185 L852.7 207.2 L855.4 213.1 L858 220.5" pathLength="1" fill="none" stroke="#FF9F1C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-<g class="endpt"><circle class="pulse" cx="858" cy="220.5" r="2.6" fill="#00B4D8"/></g>
+<path class="spark" d="M724 220.5 L726.6 220.5 L729.3 220.5 L731.9 220.5 L734.5 220.5 L737.1 220.5 L739.8 220.5 L742.4 220.5 L745 220.5 L747.6 220.5 L750.3 220.5 L752.9 220.5 L755.5 220.5 L758.2 220.5 L760.8 220.5 L763.4 220.5 L766 220.5 L768.7 220.5 L771.3 220.5 L773.9 220.5 L776.5 219 L779.2 216.1 L781.8 220.5 L784.4 219 L787.1 216.1 L789.7 220.5 L792.3 219 L794.9 220.5 L797.6 219 L800.2 213.1 L802.8 217.5 L805.5 214.6 L808.1 217.5 L810.7 220.5 L813.3 220.5 L816 220.5 L818.6 220.5 L821.2 220.5 L823.8 220.5 L826.5 220.5 L829.1 220.5 L831.7 220.5 L834.4 220.5 L837 220.5 L839.6 213.1 L842.2 210.1 L844.9 220.5 L847.5 220.5 L850.1 185 L852.7 207.2 L855.4 213.1 L858 220.5" pathLength="1" fill="none" stroke="#C2410C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<g class="endpt"><circle class="pulse" cx="858" cy="220.5" r="2.6" fill="#D9480F"/></g>
 <line x1="598" y1="232.5" x2="858" y2="232.5" stroke="#9A3412" stroke-opacity="0.08"/>
 <text x="598" y="247.5" font-size="10.5" letter-spacing="1" fill="#9A3412" fill-opacity="0.55">REVIEWS</text>
 <text class="num" x="598" y="280" font-size="28" font-weight="700" fill="#9A3412">0</text>
-<path class="spark" d="M724 280 L726.6 280 L729.3 280 L731.9 280 L734.5 280 L737.1 280 L739.8 280 L742.4 280 L745 280 L747.6 280 L750.3 280 L752.9 280 L755.5 280 L758.2 280 L760.8 280 L763.4 280 L766 280 L768.7 280 L771.3 280 L773.9 280 L776.5 280 L779.2 280 L781.8 280 L784.4 280 L787.1 280 L789.7 280 L792.3 280 L794.9 280 L797.6 280 L800.2 280 L802.8 280 L805.5 280 L808.1 280 L810.7 280 L813.3 280 L816 280 L818.6 280 L821.2 280 L823.8 280 L826.5 280 L829.1 280 L831.7 280 L834.4 280 L837 280 L839.6 280 L842.2 280 L844.9 280 L847.5 280 L850.1 280 L852.7 280 L855.4 280 L858 280" pathLength="1" fill="none" stroke="#FF9F1C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-<g class="endpt"><circle class="pulse" cx="858" cy="280" r="2.6" fill="#00B4D8"/></g>
+<path class="spark" d="M724 280 L726.6 280 L729.3 280 L731.9 280 L734.5 280 L737.1 280 L739.8 280 L742.4 280 L745 280 L747.6 280 L750.3 280 L752.9 280 L755.5 280 L758.2 280 L760.8 280 L763.4 280 L766 280 L768.7 280 L771.3 280 L773.9 280 L776.5 280 L779.2 280 L781.8 280 L784.4 280 L787.1 280 L789.7 280 L792.3 280 L794.9 280 L797.6 280 L800.2 280 L802.8 280 L805.5 280 L808.1 280 L810.7 280 L813.3 280 L816 280 L818.6 280 L821.2 280 L823.8 280 L826.5 280 L829.1 280 L831.7 280 L834.4 280 L837 280 L839.6 280 L842.2 280 L844.9 280 L847.5 280 L850.1 280 L852.7 280 L855.4 280 L858 280" pathLength="1" fill="none" stroke="#C2410C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<g class="endpt"><circle class="pulse" cx="858" cy="280" r="2.6" fill="#D9480F"/></g>
 <line x1="598" y1="292" x2="858" y2="292" stroke="#9A3412" stroke-opacity="0.08"/>
 <text x="598" y="314" font-size="10" letter-spacing="1" fill="#9A3412" fill-opacity="0.55">REPOS</text>
-<text class="num" x="598" y="338" font-size="20" font-weight="700" fill="#FF9F1C">17</text>
+<text class="num" x="598" y="338" font-size="20" font-weight="700" fill="#C2410C">17</text>
 <text x="684.7" y="314" font-size="10" letter-spacing="1" fill="#9A3412" fill-opacity="0.55">STARS</text>
-<text class="num" x="684.7" y="338" font-size="20" font-weight="700" fill="#FF9F1C">0</text>
+<text class="num" x="684.7" y="338" font-size="20" font-weight="700" fill="#C2410C">0</text>
 <text x="771.3" y="314" font-size="10" letter-spacing="1" fill="#9A3412" fill-opacity="0.55">FORKS</text>
-<text class="num" x="771.3" y="338" font-size="20" font-weight="700" fill="#FF9F1C">0</text>
+<text class="num" x="771.3" y="338" font-size="20" font-weight="700" fill="#C2410C">0</text>
 <line x1="22" y1="364" x2="858" y2="364" stroke="#9A3412" stroke-opacity="0.08"/>
 <rect x="22" y="384" width="16" height="16" rx="3" fill="#f0a742"/>
-<text x="44" y="396.6" font-size="13" fill="#B45309">Python 90.2%</text>
+<text x="44" y="396.6" font-size="13" fill="#9A3412">Python 90.2%</text>
 <rect x="189.2" y="384" width="16" height="16" rx="3" fill="#c8f042"/>
-<text x="211.2" y="396.6" font-size="13" fill="#B45309">Go 8.5%</text>
+<text x="211.2" y="396.6" font-size="13" fill="#9A3412">Go 8.5%</text>
 <rect x="356.4" y="384" width="16" height="16" rx="3" fill="#58f042"/>
-<text x="378.4" y="396.6" font-size="13" fill="#B45309">C++ 0.9%</text>
+<text x="378.4" y="396.6" font-size="13" fill="#9A3412">C++ 0.9%</text>
 <rect x="523.6" y="384" width="16" height="16" rx="3" fill="#42f09d"/>
-<text x="545.6" y="396.6" font-size="13" fill="#B45309">Makefile 0.2%</text>
+<text x="545.6" y="396.6" font-size="13" fill="#9A3412">Makefile 0.2%</text>
 <rect x="690.8" y="384" width="16" height="16" rx="3" fill="#42d3f0"/>
-<text x="712.8" y="396.6" font-size="13" fill="#B45309">CMake 0.1%</text>
-<text x="22" y="424.6" font-size="13"><tspan font-weight="700" fill="#F97316">Colors:</tspan><tspan dx="6" fill="#B45309">each one represents a programming language.</tspan></text>
-<text x="22" y="452.6" font-size="13"><tspan font-weight="700" fill="#F97316">Cells:</tspan><tspan dx="6" fill="#B45309">each one represents a GitHub repository within a programming language.</tspan></text>
-<text x="22" y="480.6" font-size="13"><tspan font-weight="700" fill="#F97316">Brightness:</tspan><tspan dx="6" fill="#B45309">proportional to how recently the repository was last pushed to.</tspan></text>
-<text x="707.1" y="480.6" font-size="13" text-anchor="end" fill="#B45309">oldest</text>
-<rect x="715.1" y="468" width="16" height="16" rx="3" fill="#FF9F1C" fill-opacity="0.15"/>
-<rect x="734.1" y="468" width="16" height="16" rx="3" fill="#FF9F1C" fill-opacity="0.25"/>
-<rect x="753.1" y="468" width="16" height="16" rx="3" fill="#FF9F1C" fill-opacity="0.35"/>
-<rect x="772.1" y="468" width="16" height="16" rx="3" fill="#FF9F1C" fill-opacity="0.45"/>
-<rect x="791.1" y="468" width="16" height="16" rx="3" fill="#FF9F1C" fill-opacity="0.55"/>
-<text x="858" y="480.6" font-size="13" text-anchor="end" fill="#B45309">newest</text>
+<text x="712.8" y="396.6" font-size="13" fill="#9A3412">CMake 0.1%</text>
+<text x="22" y="424.6" font-size="13"><tspan font-weight="700" fill="#B45309">Colors:</tspan><tspan dx="6" fill="#9A3412">each one represents a programming language.</tspan></text>
+<text x="22" y="452.6" font-size="13"><tspan font-weight="700" fill="#B45309">Cells:</tspan><tspan dx="6" fill="#9A3412">each one represents a GitHub repository within a programming language.</tspan></text>
+<text x="22" y="480.6" font-size="13"><tspan font-weight="700" fill="#B45309">Cell Area</tspan><tspan dx="6" fill="#9A3412">proportional to the amount of code in the repository.</tspan></text>
+<text x="22" y="508.6" font-size="13"><tspan font-weight="700" fill="#B45309">Brightness:</tspan><tspan dx="6" fill="#9A3412">proportional to how recently the repository was last pushed to.</tspan></text>
+<text x="707.1" y="508.6" font-size="13" text-anchor="end" fill="#9A3412">oldest</text>
+<rect x="715.1" y="496" width="16" height="16" rx="3" fill="#C2410C" fill-opacity="0.15"/>
+<rect x="734.1" y="496" width="16" height="16" rx="3" fill="#C2410C" fill-opacity="0.25"/>
+<rect x="753.1" y="496" width="16" height="16" rx="3" fill="#C2410C" fill-opacity="0.35"/>
+<rect x="772.1" y="496" width="16" height="16" rx="3" fill="#C2410C" fill-opacity="0.45"/>
+<rect x="791.1" y="496" width="16" height="16" rx="3" fill="#C2410C" fill-opacity="0.55"/>
+<text x="858" y="508.6" font-size="13" text-anchor="end" fill="#9A3412">newest</text>
 </svg>
