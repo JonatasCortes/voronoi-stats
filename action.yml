@@ -1,0 +1,51 @@
+name: Voronoi Stats
+description: Generates a Voronoi territory card from your GitHub code stats.
+
+inputs:
+  username:
+    description: GitHub username that owns the stats
+    required: false
+    default: ${{ github.repository_owner }}
+  theme:
+    description: Card theme name
+    required: false
+    default: cyberpunk
+  token:
+    description: Token used to read your GitHub data
+    required: true
+  commit:
+    description: Commit and push assets/stats.svg when it changes
+    required: false
+    default: "true"
+
+runs:
+  using: composite
+  steps:
+    - name: Install python
+      uses: actions/setup-python@v6
+      with:
+        python-version: "3.12"
+
+    - name: Generate svg card
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.token }}
+        PYTHONPATH: ${{ github.action_path }}
+        VORONOI_USERNAME: ${{ inputs.username }}
+        VORONOI_THEME: ${{ inputs.theme }}
+      run: python -m voronoi_stats "$VORONOI_USERNAME" --theme "$VORONOI_THEME"
+
+    - name: Save to repository if changed
+      if: inputs.commit == 'true'
+      shell: bash
+      run: |
+        if [ -z "$(git status --porcelain assets/stats.svg)" ]; then
+          echo "No updates were found."
+        else
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull
+          git add assets/stats.svg
+          git commit -m "auto: update voronoi stats"
+          git push
+        fi
