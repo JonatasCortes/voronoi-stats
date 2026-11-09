@@ -167,3 +167,26 @@ LABELS: Final[Mapping[str, str]] = MappingProxyType(
 THOUSANDS_SEP: Final[str] = ","
 DECIMAL_SEP: Final[str] = "."
 PERCENT_DECIMALS: Final[int] = 1
+
+# ── Idle animations ─────────────────────────────────────────────────────────
+IDLE_ORBIT_LEN: float = 0.08       # length of the light (0-1 of the border)
+IDLE_ORBIT_PERIOD: float = 5.0     # seconds to go around once
+IDLE_ORBIT_PAUSE: float = 4.0      # seconds of rest between laps
+IDLE_ORBIT_W: float = 2.0          # line width of the light
+IDLE_ORBIT_OPACITY: float = 0.8    # opacity of the light
+
+IDLE_GLINT_LEN: float = 0.2        # length of the light (0-1 of each outline)
+IDLE_GLINT_RUN: float = 1.8        # seconds one territory takes to shine
+IDLE_GLINT_GAP: float = 0.4        # seconds between one territory and the next
+IDLE_GLINT_PAUSE: float = 4.0      # seconds of rest after the last territory
+IDLE_GLINT_W: float = 3.0          # line width of the light
+IDLE_SCAN_W: int = 120             # width of the light band
+IDLE_SCAN_PERIOD: float = 3.0      # seconds to cross the map
+IDLE_SCAN_PAUSE: float = 5.0       # seconds of rest between passes
+IDLE_SCAN_OPACITY: float = 0.18    # peak opacity of the band
+
+# length of the bright dash (0-1 of the line)
+IDLE_TRACE_LEN: float = 0.15
+IDLE_TRACE_PERIOD: float = 2.0     # seconds to run along the line
+IDLE_TRACE_PAUSE: float = 4.0      # seconds of rest between runs
+IDLE_TRACE_STAGGER: float = 0.4    # delay between one chart and the next

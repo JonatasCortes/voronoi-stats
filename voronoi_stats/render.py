@@ -3,7 +3,7 @@ from __future__ import annotations
 import colorsys
 from string import Template
 from xml.sax.saxutils import escape
-
+from collections.abc import Iterable
 from voronoi_stats.constants import (
     ACTIVITY_ROW_COUNT,
     ACTIVITY_W,
@@ -74,13 +74,34 @@ from voronoi_stats.constants import (
     THOUSANDS_SEP,
     TITLE_BASELINE,
     TITLE_X_OFFSET,
+    IDLE_SCAN_OPACITY,
+    IDLE_SCAN_PAUSE,
+    IDLE_SCAN_PERIOD,
+    IDLE_SCAN_W,
+    IDLE_TRACE_LEN,
+    IDLE_TRACE_PAUSE,
+    IDLE_TRACE_PERIOD,
+    IDLE_TRACE_STAGGER,
+    IDLE_ORBIT_LEN,
+    IDLE_ORBIT_PERIOD,
+    IDLE_ORBIT_PAUSE,
+    IDLE_ORBIT_W,
+    IDLE_ORBIT_OPACITY,
+    IDLE_GLINT_LEN,
+    IDLE_GLINT_RUN,
+    IDLE_GLINT_GAP,
+    IDLE_GLINT_PAUSE,
+    IDLE_GLINT_W
 )
 from voronoi_stats.geometry import Bounds, CellShape, Point, TerritoryMap, build_territory_map
 from voronoi_stats.stats import ActivityMetric, LanguageShare, StatsReport, Totals
 from voronoi_stats.themes import Theme
 
+IDLE_EFFECTS: tuple[str, ...] = ("orbit", "glint", "scan", "trace")
 
 # ── Number and text formatting ──────────────────────────────────────────────
+
+
 def _trim(text: str) -> str:
     """'12.50' -> '12.5', '3.0' -> '3', '-0' -> '0'."""
     if "." in text:
@@ -135,46 +156,131 @@ def _language_colors(languages: tuple[LanguageShare, ...], theme: Theme) -> dict
 
 
 # ── Styles and definitions ──────────────────────────────────────────────────
-_CSS: Template = Template(
+_ENTRY_CSS: Template = Template(
     ".cell{animation:cell-in ${cell_dur}s ease-out both}"
     ".terr{animation:fade-in ${terr_dur}s ease-out ${terr_delay}s both}"
     ".spark{stroke-dasharray:1;stroke-dashoffset:0;"
     "animation:draw ${spark_dur}s ease-out ${spark_delay}s both}"
     ".num{animation:fade-in ${num_dur}s ease-out ${num_delay}s both}"
     ".endpt{animation:fade-in ${num_dur}s ease-out ${end_delay}s both}"
-    ".pulse{animation:pulse ${pulse_dur}s ease-in-out ${pulse_delay}s infinite}"
     "@keyframes cell-in{from{opacity:0;transform:scale(${start_scale})}"
     "to{opacity:1;transform:scale(1)}}"
     "@keyframes fade-in{from{opacity:0}to{opacity:1}}"
     "@keyframes draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}"
+)
+
+_PULSE_CSS: Template = Template(
+    ".pulse{animation:pulse ${pulse_dur}s ease-in-out ${pulse_delay}s infinite}"
     "@keyframes pulse{0%,100%{opacity:1}50%{opacity:${pulse_min}}}"
-    "@media (prefers-reduced-motion:reduce){"
-    ".cell,.terr,.spark,.num,.endpt,.pulse{animation:none}}"
 )
 
 
-def _style_block() -> str:
-    css: str = _CSS.substitute(
-        cell_dur=_t(ANIM_CELL_DURATION),
-        terr_dur=_t(ANIM_TERRITORY_DURATION),
-        terr_delay=_t(ANIM_TERRITORY_DELAY),
-        spark_dur=_t(ANIM_SPARK_DURATION),
-        spark_delay=_t(ANIM_SPARK_DELAY),
-        num_dur=_t(ANIM_NUM_DURATION),
-        num_delay=_t(ANIM_NUM_DELAY),
-        end_delay=_t(ANIM_SPARK_DELAY + ANIM_SPARK_DURATION),
+def _entry_end(cell_count: int) -> float:
+    """Second at which the entry animation is over."""
+    last_cell: float = (ANIM_CELL_START + max(cell_count - 1, 0) * ANIM_CELL_STEP
+                        + ANIM_CELL_DURATION)
+    return max(
+        last_cell,
+        ANIM_TERRITORY_DELAY + ANIM_TERRITORY_DURATION,
+        ANIM_SPARK_DELAY + ANIM_SPARK_DURATION,
+        ANIM_NUM_DELAY + ANIM_NUM_DURATION,
+    )
+
+
+def _motion_end(period: float, pause: float) -> str:
+    """Percent of a cycle where the motion stops and the rest begins."""
+    return _t(period / (period + pause) * 100)
+
+
+def _dash_loop_rule(name: str, length: float, run: float, rest: float, delay: float) -> str:
+    """CSS for a light that runs once along a shape (pathLength=1), rests, and repeats."""
+    end: str = _motion_end(run, rest)
+    size: str = _t(length)
+    return (
+        f".{name}{{opacity:0;stroke-dasharray:{size} 1;"
+        f"animation:{name} {_t(run + rest)}s linear {_t(delay)}s infinite}}"
+        f"@keyframes {name}{{0%{{stroke-dashoffset:0;opacity:0}}"
+        f"3%{{opacity:1}}"
+        f"{end}%{{stroke-dashoffset:-1;opacity:1}}"
+        f"100%{{stroke-dashoffset:-1;opacity:1}}}}"
+    )
+
+
+def _style_block(entry: bool, idle: frozenset[str], start: float, territory_count: int) -> str:
+    rules: list[str] = []
+
+    if entry:
+        rules.append(_ENTRY_CSS.substitute(
+            cell_dur=_t(ANIM_CELL_DURATION),
+            terr_dur=_t(ANIM_TERRITORY_DURATION),
+            terr_delay=_t(ANIM_TERRITORY_DELAY),
+            spark_dur=_t(ANIM_SPARK_DURATION),
+            spark_delay=_t(ANIM_SPARK_DELAY),
+            num_dur=_t(ANIM_NUM_DURATION),
+            num_delay=_t(ANIM_NUM_DELAY),
+            end_delay=_t(ANIM_SPARK_DELAY + ANIM_SPARK_DURATION),
+            start_scale=_t(ANIM_CELL_START_SCALE),
+        ))
+    rules.append(_PULSE_CSS.substitute(
         pulse_dur=_t(ANIM_PULSE_DURATION),
         pulse_delay=_t(ANIM_PULSE_DELAY),
-        start_scale=_t(ANIM_CELL_START_SCALE),
         pulse_min=_t(ANIM_PULSE_MIN_OPACITY),
+    ))
+
+    # ── idle effects (they start when the entry animation is over) ──
+    if "orbit" in idle:
+        rules.append(_dash_loop_rule(
+            "orbit", IDLE_ORBIT_LEN, IDLE_ORBIT_PERIOD, IDLE_ORBIT_PAUSE, start))
+
+    if "glint" in idle and territory_count > 0:
+        # every territory has the same cycle; its own delay (set inline) gives it a turn
+        slot: float = IDLE_GLINT_RUN + IDLE_GLINT_GAP
+        glint_rest: float = territory_count * slot + IDLE_GLINT_PAUSE - IDLE_GLINT_RUN
+        rules.append(_dash_loop_rule(
+            "glint", IDLE_GLINT_LEN, IDLE_GLINT_RUN, glint_rest, 0.0))
+
+    if "scan" in idle:
+        scan_total: float = IDLE_SCAN_PERIOD + IDLE_SCAN_PAUSE
+        scan_end: str = _motion_end(IDLE_SCAN_PERIOD, IDLE_SCAN_PAUSE)
+        scan_dist: str = _n(PLOT_W + IDLE_SCAN_W)
+        rules.append(
+            f".scan{{animation:scan {_t(scan_total)}s linear {_t(start)}s infinite}}"
+            f"@keyframes scan{{0%{{transform:translateX(0)}}"
+            f"{scan_end}%{{transform:translateX({scan_dist}px)}}"
+            f"100%{{transform:translateX({scan_dist}px)}}}}"
+        )
+
+    if "trace" in idle:
+        trace_total: float = IDLE_TRACE_PERIOD + IDLE_TRACE_PAUSE
+        trace_end: str = _motion_end(IDLE_TRACE_PERIOD, IDLE_TRACE_PAUSE)
+        trace_len: str = _t(IDLE_TRACE_LEN)
+        rules.append(
+            f".trace{{stroke-dasharray:{trace_len} 1;stroke-dashoffset:{trace_len};"
+            f"animation:trace {_t(trace_total)}s linear infinite}}"
+            f"@keyframes trace{{0%{{stroke-dashoffset:{trace_len}}}"
+            f"{trace_end}%{{stroke-dashoffset:-1}}100%{{stroke-dashoffset:-1}}}}"
+        )
+
+    rules.append(
+        "@media (prefers-reduced-motion:reduce){"
+        ".cell,.terr,.spark,.num,.endpt,.pulse,.orbit,.glint,.scan,.trace{animation:none}}"
     )
-    return f"<style>{css}</style>"
+    return f"<style>{''.join(rules)}</style>"
 
 
-def _defs_block(theme: Theme) -> str:
+def _defs_block(theme: Theme, idle: frozenset[str]) -> str:
     card_w: str = _n(CARD_W - CARD_STROKE)
     card_h: str = _n(CARD_H - CARD_STROKE)
     half: str = _n(CARD_STROKE / 2.0)
+    scan: str = ""
+    if "scan" in idle:
+        scan = (
+            '<linearGradient id="scan-grad">'
+            f'<stop offset="0" stop-color="{theme["accent"]}" stop-opacity="0"/>'
+            f'<stop offset="0.5" stop-color="{theme["accent"]}" stop-opacity="{_t(IDLE_SCAN_OPACITY)}"/>'
+            f'<stop offset="1" stop-color="{theme["accent"]}" stop-opacity="0"/>'
+            "</linearGradient>"
+        )
     return (
         "<defs>"
         '<linearGradient id="border" x1="0" y1="0" x2="1" y2="1">'
@@ -189,7 +295,7 @@ def _defs_block(theme: Theme) -> str:
         f'rx="{CARD_RADIUS}"/></clipPath>'
         f'<clipPath id="plot-clip"><rect x="{PLOT_X}" y="{PLOT_Y}" width="{PLOT_W}" height="{PLOT_H}" '
         f'rx="{PLOT_RADIUS}"/></clipPath>'
-        "</defs>"
+        f"{scan}</defs>"
     )
 
 
@@ -219,18 +325,25 @@ def _header_svg(theme: Theme) -> list[str]:
 
 
 # ── Map ─────────────────────────────────────────────────────────────────────
-def _cells_svg(cells: tuple[CellShape, ...], colors: dict[str, str], theme: Theme) -> list[str]:
+def _cells_svg(
+    cells: tuple[CellShape, ...],
+    colors: dict[str, str],
+    theme: Theme,
+    entry: bool,
+) -> list[str]:
     lines: list[str] = []
     for index, shape in enumerate(cells):
-        center_x, center_y = shape.center
+        center: Point = shape.center
+        center_x: float = center[0]
+        center_y: float = center[1]
         delay: float = ANIM_CELL_START + index * ANIM_CELL_STEP
+        delay_style: str = f"animation-delay:{_t(delay)}s" if entry else ""
         lines.append(
             f'<polygon class="cell" points="{_points(shape.polygon)}" '
             f'fill="{colors[shape.cell.language]}" fill-opacity="{_t(shape.cell.opacity)}" '
             f'stroke="{theme["background"]}" stroke-width="{_t(CELL_STROKE_W)}" '
             'stroke-linejoin="round" '
-            f'style="transform-origin:{_n(center_x)}px {_n(center_y)}px;'
-            f'animation-delay:{_t(delay)}s"/>'
+            f'style="transform-origin:{_n(center_x)}px {_n(center_y)}px;{delay_style}"/>'
         )
     return lines
 
@@ -253,19 +366,57 @@ def _overlay_svg(tmap: TerritoryMap, colors: dict[str, str], theme: Theme) -> li
     return lines
 
 
-def _plot_svg(tmap: TerritoryMap, colors: dict[str, str], theme: Theme) -> list[str]:
+def _glint_svg(tmap: TerritoryMap, colors: dict[str, str], start: float) -> list[str]:
+    """One light per territory outline; they shine one at a time, in order."""
+    lines: list[str] = []
+    slot: float = IDLE_GLINT_RUN + IDLE_GLINT_GAP
+    for index, territory in enumerate(tmap.territories):
+        corners: list[str] = []
+        for point in territory.polygon:
+            corners.append(f"{_n(point[0])} {_n(point[1])}")
+        path: str = "M" + " L".join(corners) + " Z"
+        delay: float = start + index * slot
+        lines.append(
+            f'<path class="glint" d="{path}" pathLength="1" fill="none" '
+            f'stroke="{colors[territory.language]}" stroke-width="{_t(IDLE_GLINT_W)}" '
+            f'stroke-linejoin="round" style="animation-delay:{_t(delay)}s"/>'
+        )
+    return lines
+
+
+def _plot_svg(
+    tmap: TerritoryMap,
+    colors: dict[str, str],
+    theme: Theme,
+    entry: bool,
+    idle: frozenset[str],
+    start: float,
+) -> list[str]:
     lines: list[str] = [
         f'<rect x="{PLOT_X}" y="{PLOT_Y}" width="{PLOT_W}" height="{PLOT_H}" '
         f'rx="{PLOT_RADIUS}" fill="{theme["plot_background"]}"/>',
         '<g clip-path="url(#plot-clip)">',
     ]
-    lines.extend(_cells_svg(tmap.cells, colors, theme))
+    lines.extend(_cells_svg(tmap.cells, colors, theme, entry))
     lines.extend(_overlay_svg(tmap, colors, theme))
+    if "glint" in idle:
+        lines.extend(_glint_svg(tmap, colors, start))
+    if "scan" in idle:
+        lines.append(
+            f'<rect class="scan" x="{PLOT_X - IDLE_SCAN_W}" y="{PLOT_Y}" '
+            f'width="{IDLE_SCAN_W}" height="{PLOT_H}" fill="url(#scan-grad)"/>'
+        )
     lines.append("</g>")
     lines.append(
         f'<rect x="{PLOT_X}" y="{PLOT_Y}" width="{PLOT_W}" height="{PLOT_H}" rx="{PLOT_RADIUS}" '
         f'fill="none" stroke="{theme["accent"]}" stroke-opacity="{_t(PLOT_BORDER_OPACITY)}"/>'
     )
+    if "orbit" in idle:
+        lines.append(
+            f'<rect class="orbit" x="{PLOT_X}" y="{PLOT_Y}" width="{PLOT_W}" height="{PLOT_H}" '
+            f'rx="{PLOT_RADIUS}" pathLength="1" fill="none" stroke="{theme["accent"]}" '
+            f'stroke-width="{_t(IDLE_ORBIT_W)}" stroke-opacity="{_t(IDLE_ORBIT_OPACITY)}"/>'
+        )
     return lines
 
 
@@ -282,7 +433,13 @@ def _spark_points(values: tuple[int, ...], x: float, y: float, width: float, hei
     return points
 
 
-def _metric_svg(metric: ActivityMetric, top: float, row_h: float, theme: Theme) -> list[str]:
+def _metric_svg(
+    metric: ActivityMetric,
+    top: float,
+    row_h: float,
+    theme: Theme,
+    trace_delay: float | None,
+) -> list[str]:
     spark_x: float = float(ACTIVITY_X + SPARK_X_OFFSET)
     spark_w: float = float(ACTIVITY_W - SPARK_X_OFFSET)
     lines: list[str] = [
@@ -297,11 +454,19 @@ def _metric_svg(metric: ActivityMetric, top: float, row_h: float, theme: Theme) 
         metric.values, spark_x, top + 12, spark_w, row_h - 24)
     if points:
         path: str = "M" + " L".join(f"{_n(x)} {_n(y)}" for x, y in points)
-        end_x, end_y = points[-1]
+        last_point: Point = points[-1]
+        end_x: float = last_point[0]
+        end_y: float = last_point[1]
         lines.append(
             f'<path class="spark" d="{path}" pathLength="1" fill="none" stroke="{theme["accent"]}" '
             f'stroke-width="{_t(SPARK_STROKE_W)}" stroke-linecap="round" stroke-linejoin="round"/>'
         )
+        if trace_delay is not None:
+            lines.append(
+                f'<path class="trace" d="{path}" pathLength="1" fill="none" '
+                f'stroke="{theme["pulse"]}" stroke-width="{_t(SPARK_STROKE_W * 1.6)}" '
+                f'stroke-linejoin="round" style="animation-delay:{_t(trace_delay)}s"/>'
+            )
         lines.append(
             f'<g class="endpt"><circle class="pulse" cx="{_n(end_x)}" cy="{_n(end_y)}" '
             f'r="{_t(SPARK_END_R)}" fill="{theme["pulse"]}"/></g>'
@@ -341,7 +506,7 @@ def _footer_svg(totals: Totals, theme: Theme) -> list[str]:
     return lines
 
 
-def _activity_svg(report: StatsReport, theme: Theme) -> list[str]:
+def _activity_svg(report: StatsReport, theme: Theme, idle: frozenset[str], start: float) -> list[str]:
     row_h: float = (PLOT_H - FOOTER_STATS_H) / ACTIVITY_ROW_COUNT
     lines: list[str] = []
     for index, metric in enumerate(report.metrics):
@@ -349,7 +514,10 @@ def _activity_svg(report: StatsReport, theme: Theme) -> list[str]:
         if index > 0:
             lines.append(
                 _divider(ACTIVITY_X, ACTIVITY_X + ACTIVITY_W, top, theme))
-        lines.extend(_metric_svg(metric, top, row_h, theme))
+        trace_delay: float | None = (
+            start + index * IDLE_TRACE_STAGGER if "trace" in idle else None
+        )
+        lines.extend(_metric_svg(metric, top, row_h, theme, trace_delay))
     lines.extend(_footer_svg(report.totals, theme))
     return lines
 
@@ -449,13 +617,28 @@ def _legend_svg(report: StatsReport, colors: dict[str, str], theme: Theme) -> li
 
 
 # ── Public entry point ──────────────────────────────────────────────────────
-def render_svg(report: StatsReport, theme: Theme) -> str:
+def render_svg(
+    report: StatsReport,
+    theme: Theme,
+    entry: bool = True,
+    idle: Iterable[str] = (),
+) -> str:
     """Return the complete SVG text for this report and theme."""
+    effects: frozenset[str] = frozenset(idle)
+    unknown: frozenset[str] = effects - frozenset(IDLE_EFFECTS)
+    if unknown:
+        raise ValueError(
+            f"Unknown idle animation: {', '.join(sorted(unknown))}. "
+            f"Available: {', '.join(IDLE_EFFECTS)}."
+        )
+
     bounds: Bounds = Bounds(float(PLOT_X), float(
         PLOT_Y), float(PLOT_W), float(PLOT_H))
     territory_map: TerritoryMap = build_territory_map(report, bounds)
     colors: dict[str, str] = _language_colors(report.languages, theme)
     description: str = LABELS["svg_desc"].replace("{user}", report.username)
+    start: float = _entry_end(len(territory_map.cells)) if entry else 0.0
+    territory_count: int = len(territory_map.territories)
 
     parts: list[str] = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{CARD_W}" height="{CARD_H}" '
@@ -463,13 +646,14 @@ def render_svg(report: StatsReport, theme: Theme) -> str:
         'aria-labelledby="svg-title svg-desc">',
         f'<title id="svg-title">{escape(LABELS["svg_title"])}</title>',
         f'<desc id="svg-desc">{escape(description)}</desc>',
-        _style_block(),
-        _defs_block(theme),
+        _style_block(entry, effects, start, territory_count),
+        _defs_block(theme, effects),
     ]
     parts.extend(_card_svg(theme))
     parts.extend(_header_svg(theme))
-    parts.extend(_plot_svg(territory_map, colors, theme))
-    parts.extend(_activity_svg(report, theme))
+    parts.extend(_plot_svg(territory_map, colors,
+                 theme, entry, effects, start))
+    parts.extend(_activity_svg(report, theme, effects, start))
     parts.extend(_legend_svg(report, colors, theme))
     parts.append("</svg>")
     return "\n".join(parts) + "\n"

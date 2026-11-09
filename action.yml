@@ -10,6 +10,14 @@ inputs:
     description: Card theme name
     required: false
     default: cyberpunk
+  entry_animation:
+    description: "Play the entry animation (true or false)"
+    required: false
+    default: "true"
+  idle_animation:
+    description: "Idle animations separated by comma (orbit, glint, scan, trace) or none"
+    required: false
+    default: "none"
   token:
     description: Token used to read your GitHub data
     required: true
@@ -33,7 +41,13 @@ runs:
         PYTHONPATH: ${{ github.action_path }}
         VORONOI_USERNAME: ${{ inputs.username }}
         VORONOI_THEME: ${{ inputs.theme }}
-      run: python -m voronoi_stats "$VORONOI_USERNAME" --theme "$VORONOI_THEME"
+        VORONOI_ENTRY: ${{ inputs.entry_animation }}
+        VORONOI_IDLE: ${{ inputs.idle_animation }}
+      run: >
+        python -m voronoi_stats "$VORONOI_USERNAME"
+        --theme "$VORONOI_THEME"
+        --entry "$VORONOI_ENTRY"
+        --idle "$VORONOI_IDLE"
 
     - name: Save to repository if changed
       if: inputs.commit == 'true'

@@ -39,6 +39,7 @@ It is also as light as it can be: **plain Python, no external dependencies** (on
 - [🛠️ Customization](#customization)
   - [What you can change](#what-you-can-change)
   - [Constants reference](#constants-reference)
+- [🎬 Animations](#animations)
 - [🎨 Themes](#themes)
   - [1. Dark Colors](#1-dark-colors)
   - [2. Light Colors (Pastels)](#2-light-colors-pastels)
@@ -143,6 +144,8 @@ The action accepts these inputs:
 | ---------- | ------------------------ | --------------------------------------------------------------------------- |
 | `token`    | -                        | The `GH_TOKEN` secret.                                        |
 | `theme`    | `cyberpunk`              | Any of the names listed in the [Themes](#themes) section.                   |
+| `entry_animation` | `true`                   | Set to `"false"` to turn off the entry animation.                           |
+| `idle_animation`  | `none`                   | One or more of `orbit`, `glint`, `scan`, `trace`, separated by comma (for example, `glint,trace`), or `none`. See [Animations](#animations). |
 | `username` | Repository owner         | Only change this if you want to display another user's data. In that case, you must provide their GitHub token.          |
 | `commit`   | `true`                   | Set to `"false"` if you prefer to handle the commit of `stats.svg` yourself. |
 
@@ -218,15 +221,95 @@ Here is what each group of constants is for:
 | **Card layout** | `CARD_W`, `PAD`, `HEADER_*`, `PLOT_*`, `LEGEND_*`, `ACTIVITY_*`, `FOOTER_STATS_H` | The size of the card and the position and spacing of the map, the legend (row height, color squares, opacity scale) and the activity column |
 | **Geometry** | `POWER_MAX_ITER`, `POWER_TOLERANCE`, `POWER_STEP`, `SEED_MARGIN`, `DOMINANT_SHARE` | How the map is calculated and how the biggest language is placed |
 | **Output and GitHub API** | `OUTPUT_PATH`, `TOKEN_ENV`, `GRAPHQL_URL`, `REPOS_PAGE_SIZE`, `LANGS_PER_REPO` | Where the SVG is saved, the name of the token variable and how the data is requested from GitHub |
+| **Idle animation** | `IDLE_ORBIT_*`, `IDLE_GLINT_*`, `IDLE_SCAN_*`, `IDLE_TRACE_*` | Length, speed, pauses between runs, line width and opacity of each idle effect |
 
 > [!TIP]
-> The easiest and most noticeable changes are the animation times (`ANIM_*`) and `MAX_LANGUAGES`. Try `MAX_LANGUAGES = 3` for a cleaner map.
+> The easiest and most noticeable changes are the animation times (`ANIM_*`), the pauses of the idle effects (`IDLE_*_PAUSE`) and `MAX_LANGUAGES`. Try `MAX_LANGUAGES = 3` for a cleaner map.
 
 > [!CAUTION]
 > Be careful with the **Card layout**, **Geometry** and **Output and GitHub API** groups. Changing them can misalign the card or break the data download. If something goes wrong, restore the original values. Also remember that:
 > - each legend explanation must fit in one line of the card (about 100 characters), so keep your translations short;
 > - if you change `OUTPUT_PATH`, update the `git status` and `git add` paths in the workflow;
 > - if you change `TOKEN_ENV`, update the `GH_TOKEN` name in the workflow.
+
+<p align="right"><a href="#table-of-contents">⬆ back to top</a></p>
+
+---
+
+## Animations
+
+The card has two kinds of animation, and each one can be turned on or off on its own:
+
+- **Entry animation**: plays once when the card loads (cells grow in, lines are drawn, numbers fade in). It is on by default.
+- **Idle animation**: a soft effect that keeps running after the entry, just to give the card some life. It is off by default.
+
+> [!NOTE]
+> Idle animations never touch the cells (color or opacity), because they carry data: the opacity of a cell shows how recent its last push was. The effects only act on decorative parts of the card, rest most of the time and loop on different cycles, so they never compete with the data.
+
+| Input | Values | What it does |
+| --- | --- | --- |
+| `entry_animation` | `true` (default) or `false` | Turns the entry animation on or off. |
+| `idle_animation` | `none` (default), `orbit`, `glint`, `scan`, `trace` | Chooses the idle animation. Use a comma to combine several. |
+
+All examples below use the `neon` theme, so they are easy to compare.
+
+### Orbit
+
+A short light goes around the border of the map and then rests for a few seconds.
+
+`idle_animation: orbit`
+<p align="center"><img src="assets/stats_neon_idle_orbit.svg" alt="Code Territory card, orbit animation" width="800"></p>
+
+### Glint
+
+A light runs along the outline of one territory at a time, in the color of that language, and then rests before starting again.
+
+`idle_animation: glint`
+<p align="center"><img src="assets/stats_neon_idle_glint.svg" alt="Code Territory card, glint animation" width="800"></p>
+
+### Scan
+
+A soft band of light crosses the map from left to right, like a radar, and pauses between passes.
+
+`idle_animation: scan`
+<p align="center"><img src="assets/stats_neon_idle_scan.svg" alt="Code Territory card, scan animation" width="800"></p>
+
+### Trace
+
+A bright dash runs along each activity chart, one after the other.
+
+`idle_animation: trace`
+<p align="center"><img src="assets/stats_neon_idle_trace.svg" alt="Code Territory card, trace animation" width="800"></p>
+
+### Combining animations
+
+Effects act on different parts of the card, so they can be combined. Here is every idle animation together:
+
+`idle_animation: orbit,glint,scan,trace`
+<p align="center"><img src="assets/stats_neon_idle_orbit_glint_scan_trace.svg" alt="Code Territory card, all idle animations" width="800"></p>
+
+> [!TIP]
+> For a calmer card, pick one or two effects. The order in the list does not matter.
+
+### Using them in the workflow
+
+```yml
+      - uses: JonatasCortes/voronoi-stats@v1
+        with:
+          theme: cyberpunk
+          entry_animation: "true"
+          idle_animation: glint,trace
+          token: ${{ secrets.GH_TOKEN }}
+```
+
+To keep only the idle animation, set `entry_animation: "false"`. To run it on your computer:
+
+```bash
+python -m voronoi_stats YourGithubUser --theme neon --entry false --idle glint,trace
+```
+
+> [!NOTE]
+> Animations are disabled automatically for people whose system asks for reduced motion (`prefers-reduced-motion`).
 
 <p align="right"><a href="#table-of-contents">⬆ back to top</a></p>
 
@@ -557,6 +640,7 @@ Available themes: [`heaven`](#heaven) · [`hell`](#hell) · [`abyss`](#abyss)
 | **The workflow cannot push the SVG** | Open **Settings → Actions → General → Workflow permissions** and allow **Read and write permissions**. |
 | **The card is empty or has few repositories** | Forks and archived repositories are ignored, and private repositories need the `repo` permission on the token. |
 | **The card stopped updating after a long time** | GitHub can pause scheduled workflows in repositories with no activity for 60 days. Open the **Actions** tab and enable the workflow again, or run it manually. |
+| **"Unknown idle animation"** | The `idle_animation` value has a name that does not exist. The error message lists the available ones (`orbit`, `glint`, `scan`, `trace`). |
 
 <p align="right"><a href="#table-of-contents">⬆ back to top</a></p>
 
