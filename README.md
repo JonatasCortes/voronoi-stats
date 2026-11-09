@@ -80,11 +80,31 @@ Follow the steps below in order. In the end you will have a card that updates it
 > [!NOTE]
 > Everything below happens in your **profile repository**, the special repository named exactly like your GitHub username (for example, `Bob/Bob`).
 
-### Step 1: Copy the `voronoi-stats/` folder
+### Step 1: Create the access token
 
-See the `voronoi-stats/` folder in this repository? Copy the **entire folder** to the root of your profile repository.
+The action needs permission to read your repositories and your activity. For that, create a **classic** personal access token:
 
-### Step 2: Create the GitHub Actions workflow
+1. Open **GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)**.
+2. Click **Generate new token (classic)**.
+3. Give it a name (for example, `voronoi-stats`) and select the `read:user` permission.
+4. *(Optional)* If you want your **private repositories** in the map, also select `repo`. Without it, only public repositories are used.
+5. Click **Generate token** and **copy it right away**, because GitHub will not show it again.
+
+> [!IMPORTANT]
+> Never commit the token to the repository. It must live only in the repository secrets, as shown in the next step.
+
+> [!CAUTION]
+> If the token expires, the automation will stop working, and a new token must be generated to restore functionality.
+
+### Step 2: Save the token as a repository secret
+
+1. Go to your profile repository on GitHub and open **Settings → Secrets and variables → Actions**.
+2. Click **New repository secret**.
+3. In **Name**, type exactly `GH_TOKEN`.
+4. In **Secret**, paste the token you just created.
+5. Click **Add secret**.
+
+### Step 3: Create the GitHub Actions workflow
 
 Create a `.github/workflows` folder in the root of the repository and add a file called `voronoi-stats.yml` to it, with the following content:
 
@@ -103,96 +123,40 @@ concurrency:
   group: voronoi-stats
   cancel-in-progress: false
 
-env:
-  USERNAME: ${{ github.repository_owner }}
-  THEME: cyberpunk
-
 jobs:
   update:
     runs-on: ubuntu-latest
     steps:
-      - name: Download repository
-        uses: actions/checkout@v7
+      - uses: actions/checkout@v7
 
-      - name: Install python
-        uses: actions/setup-python@v6
+      - uses: JonatasCortes/voronoi-stats@v1
         with:
-          python-version: "3.12"
-
-      - name: Generate svg card
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: python -m voronoi_stats "$USERNAME" --theme "$THEME"
-
-      - name: Save to repository if changed
-        run: |
-          if [ -z "$(git status --porcelain assets/stats.svg)" ]; then
-            echo "No updates were found."
-          else
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git pull
-            git add assets/stats.svg
-            git commit -m "auto: update voronoi stats"
-            git push
-          fi
+          theme: cyberpunk
+          token: ${{ secrets.GH_TOKEN }}
 ```
 
-This workflow runs **every day at 06:00 UTC** and can also be started manually (`workflow_dispatch`). When something changes, it commits the new `assets/stats.svg` file by itself.
+This workflow runs **every day at 06:00 UTC** and can also be started manually. When something changes, it commits the new `assets/stats.svg` file by itself.
 
-> [!WARNING]
-> `USERNAME` defaults to the owner of the repository, which is correct for a profile repository. `THEME` accepts any of the names listed in the [Themes](#themes) section, so feel free to test all of them.
+The action accepts these inputs:
 
-> [!NOTE]
-> Python 3.12 is recommended. The code needs Python 3.9 or newer.
+| Input      | Default                  | Description                                                                 |
+| ---------- | ------------------------ | --------------------------------------------------------------------------- |
+| `token`    | -                        | The `GH_TOKEN` secret.                                        |
+| `theme`    | `cyberpunk`              | Any of the names listed in the [Themes](#themes) section.                   |
+| `username` | Repository owner         | Only change this if you want to display another user's data. In that case, you must provide their GitHub token.          |
+| `commit`   | `true`                   | Set to `"false"` if you prefer to handle the commit of `stats.svg` yourself. |
 
-### Step 3: Add a `.gitignore`
-
-You may also need a `.gitignore` file in the root of the repository, with at least the following lines:
-
-```gitignore
-__pycache__/
-*.pyc
-.DS_Store
-```
-
-### Step 4: Create the access token
-
-The script needs permission to read your repositories and your activity. For that, create a **classic** personal access token:
-
-1. Open **GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)**.
-2. Click **Generate new token (classic)**.
-3. Give it a name (for example, `voronoi-stats`) and select the `read:user` permission.
-4. *(Optional)* If you want your **private repositories** in the map, also select `repo`. Without it, only public repositories are used.
-5. Click **Generate token** and **copy it right away**, because GitHub will not show it again.
-
-> [!IMPORTANT]
-> Never commit the token to the repository. It must live only in the repository secrets, as shown in the next step.
-
-> [!CAUTION]
-> If the token expires, the automation will stop working, and a new token must be generated to restore functionality.
-
-### Step 5: Save the token as a repository secret
-
-With the token copied:
-
-1. Go to your profile repository on GitHub and open **Settings → Secrets and variables → Actions**.
-2. Click **New repository secret**.
-3. In **Name**, type exactly `GH_TOKEN`.
-4. In **Secret**, paste the token you just created.
-5. Click **Add secret**.
-
-### Step 6: Run the pipeline
+### Step 4: Run the workflow
 
 1. Open the **Actions** tab of the repository.
 2. Select the **voronoi-stats** workflow.
 3. Click **Run workflow**.
 
-When the automation finishes, an `assets/` folder will be created with the `stats.svg` file inside it.
+When it finishes, an `assets/` folder will be created with the `stats.svg` file inside it.
 
-### Step 7: Show the card in your profile
+### Step 5: Show the card in your profile
 
-Finally, add the following to your profile `README.md`:
+Add the following to your profile `README.md`:
 
 ```html
 <p align="center">
@@ -209,13 +173,13 @@ Set the `width` value that best suits your README, then **commit and push** the 
 
 ### Optional: run it on your computer
 
-With the `GH_TOKEN` variable defined in your terminal, you can also generate the card locally, from the root of your profile repository:
+Clone this repository and, with the `GH_TOKEN` variable defined in your terminal, run from the root of the clone:
 
 ```bash
 python -m voronoi_stats YourGithubUser --theme ThemeName
 ```
 
-The file is saved to `assets/stats.svg`.
+The file is saved to `assets/stats.svg`. Python 3.9 or newer is required.
 
 <p align="right"><a href="#table-of-contents">⬆ back to top</a></p>
 
